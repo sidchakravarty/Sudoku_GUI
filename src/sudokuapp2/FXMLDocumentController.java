@@ -880,7 +880,7 @@ public class FXMLDocumentController implements Initializable {
             if(cell.getText().isEmpty()) {
                 cell.setStyle("-fx-background-color:  white; -fx-border-color: silver; -fx-text-fill: black; -fx-font-size: 17;");
             } else {
-                cell.setStyle("-fx-background-color:  aquamarine; -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+                cell.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
             }
         }        
 
@@ -900,38 +900,6 @@ public class FXMLDocumentController implements Initializable {
                 }                
             }
             return true;
-        }
-    }
-    
-    /**
-     * This inner class adds an event handler to each of the text boxes so that when
-     * they are clicked, the fx:id of the text box is shown below
-     */
-    private class MouseClickedEventHandler implements EventHandler<Event> {
-        @Override
-        public void handle(Event e) {
-            System.out.println("Cell: " + ((Control)e.getSource()).getId());
-
-            //if(hasGameStarted == false) {
-                String controlName = ((Control)e.getSource()).getId().toString();
-                switch (controlName) {
-                    case "R1C1":
-                        System.out.println("R1C1 was clicked");
-                        //changeStyle(R1C1);
-                        break;
-                        
-                    case "R1C2":
-                        System.out.println("R1C2 was clicked");                        
-                        break;
-                }
-                /*
-                if(R1C1.getText().isEmpty()) {
-                    R1C1.setStyle("-fx-text-fill: black; -fx-font-size: 17;");
-                } else {
-                    R1C1.setStyle("-fx-text-fill: red; -fx-font-size: 20;");
-                }
-                */
-            //}            
         }
     }
 }
