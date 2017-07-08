@@ -165,6 +165,41 @@
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
+            <TextField fx:id="R1C4" alignment="CENTER" layoutX="366.0" layoutY="71.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R1C5" alignment="CENTER" layoutX="446.0" layoutY="71.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R1C6" alignment="CENTER" layoutX="526.0" layoutY="71.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R1C7" alignment="CENTER" layoutX="622.0" layoutY="71.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R1C8" alignment="CENTER" layoutX="702.0" layoutY="71.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R1C9" alignment="CENTER" layoutX="780.0" layoutY="71.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R2C1" alignment="CENTER" layoutX="106.0" layoutY="121.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
             <TextField fx:id="R2C2" alignment="CENTER" layoutX="186.0" layoutY="121.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
@@ -175,52 +210,7 @@
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="R2C1" alignment="CENTER" layoutX="106.0" layoutY="121.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R3C3" alignment="CENTER" layoutX="266.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R3C2" alignment="CENTER" layoutX="186.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R3C1" alignment="CENTER" layoutX="106.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R2C6" alignment="CENTER" layoutX="526.0" layoutY="121.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R1C5" alignment="CENTER" layoutX="446.0" layoutY="71.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R3C4" alignment="CENTER" layoutX="366.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R3C6" alignment="CENTER" layoutX="526.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R1C4" alignment="CENTER" layoutX="366.0" layoutY="71.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R1C6" alignment="CENTER" layoutX="526.0" layoutY="71.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+            <TextField fx:id="R2C4" alignment="CENTER" layoutX="366.0" layoutY="121.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
@@ -230,12 +220,12 @@
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="R2C4" alignment="CENTER" layoutX="366.0" layoutY="121.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+            <TextField fx:id="R2C6" alignment="CENTER" layoutX="526.0" layoutY="121.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="R3C5" alignment="CENTER" layoutX="446.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+            <TextField fx:id="R2C7" alignment="CENTER" layoutX="622.0" layoutY="121.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
@@ -245,12 +235,37 @@
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="R1C9" alignment="CENTER" layoutX="780.0" layoutY="71.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+            <TextField fx:id="R2C9" alignment="CENTER" layoutX="780.0" layoutY="121.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="R3C9" alignment="CENTER" layoutX="780.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+            <TextField fx:id="R3C1" alignment="CENTER" layoutX="106.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R3C2" alignment="CENTER" layoutX="186.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R3C3" alignment="CENTER" layoutX="266.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R3C4" alignment="CENTER" layoutX="366.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R3C5" alignment="CENTER" layoutX="446.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R3C6" alignment="CENTER" layoutX="526.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
@@ -265,137 +280,7 @@
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="R2C9" alignment="CENTER" layoutX="780.0" layoutY="121.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R1C8" alignment="CENTER" layoutX="702.0" layoutY="71.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R2C7" alignment="CENTER" layoutX="622.0" layoutY="121.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R1C7" alignment="CENTER" layoutX="622.0" layoutY="71.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R6C1" alignment="CENTER" layoutX="106.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R4C5" alignment="CENTER" layoutX="446.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R5C4" alignment="CENTER" layoutX="366.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R6C8" alignment="CENTER" layoutX="702.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R4C2" alignment="CENTER" layoutX="186.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R5C5" alignment="CENTER" layoutX="446.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R5C7" alignment="CENTER" layoutX="622.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R6C6" alignment="CENTER" layoutX="526.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R4C7" alignment="CENTER" layoutX="622.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R5C2" alignment="CENTER" layoutX="186.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R5C8" alignment="CENTER" layoutX="702.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R5C1" alignment="CENTER" layoutX="106.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R5C9" alignment="CENTER" layoutX="782.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R6C2" alignment="CENTER" layoutX="186.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R4C6" alignment="CENTER" layoutX="526.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R4C8" alignment="CENTER" layoutX="702.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R4C3" alignment="CENTER" layoutX="266.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R5C6" alignment="CENTER" layoutX="526.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R4C9" alignment="CENTER" layoutX="782.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R5C3" alignment="CENTER" layoutX="266.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R6C3" alignment="CENTER" layoutX="266.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R6C9" alignment="CENTER" layoutX="782.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R6C4" alignment="CENTER" layoutX="366.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+            <TextField fx:id="R3C9" alignment="CENTER" layoutX="780.0" layoutY="171.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
@@ -405,7 +290,12 @@
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="R6C5" alignment="CENTER" layoutX="446.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+            <TextField fx:id="R4C2" alignment="CENTER" layoutX="186.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R4C3" alignment="CENTER" layoutX="266.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
@@ -415,42 +305,127 @@
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
+            <TextField fx:id="R4C5" alignment="CENTER" layoutX="446.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R4C6" alignment="CENTER" layoutX="526.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R4C7" alignment="CENTER" layoutX="622.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R4C8" alignment="CENTER" layoutX="702.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R4C9" alignment="CENTER" layoutX="782.0" layoutY="234.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R5C1" alignment="CENTER" layoutX="106.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R5C2" alignment="CENTER" layoutX="186.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R5C3" alignment="CENTER" layoutX="266.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R5C4" alignment="CENTER" layoutX="366.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R5C5" alignment="CENTER" layoutX="446.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R5C6" alignment="CENTER" layoutX="526.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R5C7" alignment="CENTER" layoutX="622.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R5C8" alignment="CENTER" layoutX="702.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R5C9" alignment="CENTER" layoutX="782.0" layoutY="284.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R6C1" alignment="CENTER" layoutX="106.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R6C2" alignment="CENTER" layoutX="186.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R6C3" alignment="CENTER" layoutX="266.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R6C4" alignment="CENTER" layoutX="366.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R6C5" alignment="CENTER" layoutX="446.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R6C6" alignment="CENTER" layoutX="526.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
             <TextField fx:id="R6C7" alignment="CENTER" layoutX="622.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="R9C2" alignment="CENTER" layoutX="186.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+            <TextField fx:id="R6C8" alignment="CENTER" layoutX="702.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="R8C7" alignment="CENTER" layoutX="622.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+            <TextField fx:id="R6C9" alignment="CENTER" layoutX="782.0" layoutY="334.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="R9C4" alignment="CENTER" layoutX="366.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+            <TextField fx:id="R7C1" alignment="CENTER" layoutX="106.0" layoutY="400.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="R8C6" alignment="CENTER" layoutX="526.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R8C4" alignment="CENTER" layoutX="366.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R7C8" alignment="CENTER" layoutX="702.0" layoutY="400.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R9C3" alignment="CENTER" layoutX="266.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+            <TextField fx:id="R7C2" alignment="CENTER" layoutX="186.0" layoutY="400.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
@@ -465,82 +440,7 @@
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="R8C5" alignment="CENTER" layoutX="446.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R8C9" alignment="CENTER" layoutX="782.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R9C8" alignment="CENTER" layoutX="702.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R9C7" alignment="CENTER" layoutX="622.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R7C1" alignment="CENTER" layoutX="106.0" layoutY="400.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R9C9" alignment="CENTER" layoutX="782.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R8C2" alignment="CENTER" layoutX="186.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R7C7" alignment="CENTER" layoutX="622.0" layoutY="400.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R9C5" alignment="CENTER" layoutX="446.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R8C3" alignment="CENTER" layoutX="266.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R8C1" alignment="CENTER" layoutX="106.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R9C1" alignment="CENTER" layoutX="106.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R7C9" alignment="CENTER" layoutX="782.0" layoutY="400.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
             <TextField fx:id="R7C5" alignment="CENTER" layoutX="446.0" layoutY="400.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R7C2" alignment="CENTER" layoutX="186.0" layoutY="400.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
-               <font>
-                  <Font name="Arial" size="17.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="R9C6" alignment="CENTER" layoutX="526.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>
@@ -550,7 +450,107 @@
                   <Font name="Arial" size="17.0" />
                </font>
             </TextField>
+            <TextField fx:id="R7C7" alignment="CENTER" layoutX="622.0" layoutY="400.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R7C8" alignment="CENTER" layoutX="702.0" layoutY="400.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R7C9" alignment="CENTER" layoutX="782.0" layoutY="400.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R8C1" alignment="CENTER" layoutX="106.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R8C2" alignment="CENTER" layoutX="186.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R8C3" alignment="CENTER" layoutX="266.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R8C4" alignment="CENTER" layoutX="366.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R8C5" alignment="CENTER" layoutX="446.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R8C6" alignment="CENTER" layoutX="526.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R8C7" alignment="CENTER" layoutX="622.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
             <TextField fx:id="R8C8" alignment="CENTER" layoutX="702.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R8C9" alignment="CENTER" layoutX="782.0" layoutY="450.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R9C1" alignment="CENTER" layoutX="106.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R9C2" alignment="CENTER" layoutX="186.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R9C3" alignment="CENTER" layoutX="266.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R9C4" alignment="CENTER" layoutX="366.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R9C5" alignment="CENTER" layoutX="446.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R9C6" alignment="CENTER" layoutX="526.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R9C7" alignment="CENTER" layoutX="622.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R9C8" alignment="CENTER" layoutX="702.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
+               <font>
+                  <Font name="Arial" size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="R9C9" alignment="CENTER" layoutX="782.0" layoutY="500.0" prefHeight="50.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: silver;">
                <font>
                   <Font name="Arial" size="17.0" />
                </font>

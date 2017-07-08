@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -31,6 +30,10 @@ import javax.swing.JOptionPane;
 public class FXMLDocumentController implements Initializable {
     
     private boolean hasGameStarted;
+    private List<TextField> target;
+    private List<TextField> myCells;
+    private Iterator<TextField> it;
+    private int[][] sudoku_grid = new int [9][9];
     
     // PANE
     @FXML
@@ -219,18 +222,151 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TextField R9C9;          
 
-   
+   /**
+    * Purpose: This method prints traverses through all the cells in the Sudoku
+    * grid and then populates a 2D array with the values listed. Wherever a
+    * value is missing, it will enter ZERO
+    * @param e 
+    */
     @FXML
     private void startGame(Event e) {
         // Check to make sure Select Method has been selected ...
         hasGameStarted = true;
+        
+        int rows, cols;
+        rows = cols = 0;
+        String text;
+        String textfield_id;
+        for(int i =0; i < myCells.size(); i++) {
+            text = myCells.get(i).getText().toString();
+            textfield_id = myCells.get(i).getId().toString();
+            if(text.length() > 0) {
+                System.out.println(textfield_id + " - " + text);
+                sudoku_grid[rows][cols] = Integer.parseInt(text);
+            } else {
+                sudoku_grid[rows][cols] = 0;
+            }
+            cols++;
+            if(cols>=9) {
+                cols=0;
+                rows++;
+            }
+        }
+        
+        boolean blnColumn = true;
+        String strSudokuBoard="";
+        for(int i = 0; i<9; i++) {
+            for (int j = 0; j<9; j++) {
+                if(blnColumn) {
+                    strSudokuBoard = strSudokuBoard + " " + Integer.toString(sudoku_grid[i][j]);
+                    blnColumn=false;
+                } else {
+                    strSudokuBoard = strSudokuBoard + " " + Integer.toString(sudoku_grid[i][j]);                    
+                    //System.out.print(" " + sudoku_grid[i][j]);                    
+                }
+                if (j == 8) {
+                    System.out.println(strSudokuBoard);
+                    strSudokuBoard="";
+                    break;
+                }
+            }
+        }
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         hasGameStarted = false;
                 
-        R1C1.addEventHandler(MouseEvent.MOUSE_EXITED, new MouseExitedEventHandler());
+        R1C1.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R1C2.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R1C3.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R1C4.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R1C5.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R1C6.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R1C7.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R1C8.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R1C9.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+
+        R2C1.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R2C2.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R2C3.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R2C4.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R2C5.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R2C6.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R2C7.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R2C8.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R2C9.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());        
+
+        R3C1.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R3C2.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R3C3.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R3C4.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R3C5.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R3C6.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R3C7.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R3C8.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R3C9.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());            
+
+        R4C1.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R4C2.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R4C3.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R4C4.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R4C5.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R4C6.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R4C7.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R4C8.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R4C9.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());           
+        
+        R5C1.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R5C2.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R5C3.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R5C4.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R5C5.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R5C6.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R5C7.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R5C8.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R5C9.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());         
+
+        R6C1.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R6C2.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R6C3.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R6C4.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R6C5.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R6C6.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R6C7.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R6C8.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R6C9.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());                
+        
+        R7C1.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R7C2.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R7C3.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R7C4.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R7C5.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R7C6.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R7C7.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R7C8.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R7C9.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());              
+        
+        R8C1.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R8C2.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R8C3.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R8C4.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R8C5.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R8C6.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R8C7.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R8C8.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R8C9.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());         
+        
+        R9C1.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R9C2.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R9C3.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R9C4.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R9C5.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R9C6.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R9C7.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R9C8.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
+        R9C9.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());                 
+
         R1C1.addEventHandler(MouseEvent.MOUSE_EXITED, new MouseExitedEventHandler());
         R1C2.addEventHandler(MouseEvent.MOUSE_EXITED, new MouseExitedEventHandler());
         R1C3.addEventHandler(MouseEvent.MOUSE_EXITED, new MouseExitedEventHandler());
@@ -321,8 +457,8 @@ public class FXMLDocumentController implements Initializable {
         R9C8.addEventHandler(MouseEvent.MOUSE_EXITED, new MouseExitedEventHandler());
         R9C9.addEventHandler(MouseEvent.MOUSE_EXITED, new MouseExitedEventHandler());
 
-        List<TextField> myCells = getNodesOfType(mainPane, TextField.class);
-        Iterator<TextField> it = myCells.iterator();
+        myCells = getNodesOfType(mainPane, TextField.class);
+        it = myCells.iterator();
         while (it.hasNext()) {
             String text = it.next().getText().toString();
             if(text.length()>0) {
@@ -330,10 +466,9 @@ public class FXMLDocumentController implements Initializable {
             }
         }
         
-       String[] strOptions = {
-           "Manual",
-           "Simple",
-           "AI"
+        // Add Combo Box options
+        String[] strOptions = {
+           "Manual", "Simple", "AI"
        };
         try {
             cmb_selectMethod.getItems().addAll(strOptions);            
@@ -366,6 +501,593 @@ public class FXMLDocumentController implements Initializable {
         return Collections.unmodifiableList(elements);
     }
     
+    private class MouseClickedEventHandler implements EventHandler<Event> {
+        @Override
+        public void handle (Event e) {
+
+            String[] strTargetCells = new String[27];
+            if(hasGameStarted) {
+                String strStyle = "";
+                resetHighlights();
+                String strControlName = ((Control)e.getSource()).getId().toString();
+                strTargetCells = createHighlightArray(strControlName);
+                target = getNodesOfType(mainPane, TextField.class);
+                for(TextField t : target) {
+                    strStyle = t.getStyle();
+                    System.out.println("Cell Style: " + t.getId() + " - " + strStyle);
+                    if(!strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
+                        for(int i = 0; i < strTargetCells.length; i++) {
+                            if(strTargetCells[i] != null) {
+                                if(t.getId().contains(strTargetCells[i])) {
+                                    t.setStyle("-fx-background-color: RGB(162,100,100); -fx-opacity: 0.7; -fx-border-color: silver");  
+                                    break;
+                                }                                    
+                            }
+                        }                        
+                    }
+                }
+            }
+        } 
+
+        private String[] createHighlightArray(String strControlName) {
+            String[] strTargetCells = new String[27];
+            String strC = strControlName.substring(2);
+            String strR = strControlName.substring(0, 2);
+            int r = Integer.parseInt(strR.substring(1));
+            int c = Integer.parseInt(strC.substring(1));
+
+            // For Rows 
+            int counter = 0;
+            for (int i=1; i < 10; i++) {
+                strTargetCells[counter] = strR + "C" + i;
+                counter++;
+            }
+            
+            // For Cols
+            for (int i=1; i < 10; i++) {
+                strTargetCells[counter] = "R" + i + strC;
+                counter++;
+            }            
+            
+            // For Block
+            
+            // TOP LEFT
+            if(r >= 1 && r <= 3) {
+                if (c >= 1 && c <= 3) {
+                    for (int i = 1; i <=3; i++) {
+                        for (int j = 1; j <= 3; j++) {
+                            strTargetCells[counter] = "R" + i + "C" + j;
+                            counter++;
+                        }
+                    }
+                }
+            }
+
+            // TOP CENTER
+            if(r >= 1 && r <= 3) {
+                if (c >= 4 && c <= 6) {
+                    for (int i = 1; i <=3; i++) {
+                        for (int j = 4; j <= 6; j++) {
+                            strTargetCells[counter] = "R" + i + "C" + j;
+                            counter++;
+                        }
+                    }
+                }
+            }            
+
+            // TOP RIGHT
+            if(r >= 1 && r <= 3) {
+                if (c >= 7 && c <= 9) {
+                    for (int i = 1; i <=3; i++) {
+                        for (int j = 7; j <= 9; j++) {
+                            strTargetCells[counter] = "R" + i + "C" + j;
+                            counter++;
+                        }
+                    }
+                }
+            }               
+
+            // MIDDLE LEFT
+            if(r >= 4 && r <= 6) {
+                if (c >= 1 && c <= 3) {
+                    for (int i = 4; i <= 6; i++) {
+                        for (int j = 1; j <= 3; j++) {
+                            strTargetCells[counter] = "R" + i + "C" + j;
+                            counter++;
+                        }
+                    }
+                }
+            }
+
+            // MIDDLE CENTER
+            if(r >= 4 && r <= 6) {
+                if (c >= 4 && c <= 6) {
+                    for (int i = 4; i <=6; i++) {
+                        for (int j = 4; j <= 6; j++) {
+                            strTargetCells[counter] = "R" + i + "C" + j;
+                            counter++;
+                        }
+                    }
+                }
+            }            
+
+            // MIDDLE RIGHT
+            if(r >= 4 && r <= 6) {
+                if (c >= 7 && c <= 9) {
+                    for (int i = 4; i <=6; i++) {
+                        for (int j = 7; j <= 9; j++) {
+                            strTargetCells[counter] = "R" + i + "C" + j;
+                            counter++;
+                        }
+                    }
+                }
+            }              
+
+            // BOTTOM LEFT
+            if(r >= 7 && r <= 9) {
+                if (c >= 1 && c <= 3) {
+                    for (int i = 7; i <= 9; i++) {
+                        for (int j = 1; j <= 3; j++) {
+                            strTargetCells[counter] = "R" + i + "C" + j;
+                            counter++;
+                        }
+                    }
+                }
+            }
+
+            // BOTTOM CENTER
+            if(r >= 7 && r <= 9) {
+                if (c >= 4 && c <= 6) {
+                    for (int i = 7; i <= 9; i++) {
+                        for (int j = 4; j <= 6; j++) {
+                            strTargetCells[counter] = "R" + i + "C" + j;
+                            counter++;
+                        }
+                    }
+                }
+            }            
+
+            // BOTTOM RIGHT
+            if(r >= 7 && r <= 9) {
+                if (c >= 7 && c <= 9) {
+                    for (int i = 7; i <= 9; i++) {
+                        for (int j = 7; j <= 9; j++) {
+                            strTargetCells[counter] = "R" + i + "C" + j;
+                            counter++;
+                        }
+                    }
+                }
+            }                
+            
+            return strTargetCells;
+        }
+    }
+
+    
+    private void resetHighlights() {
+        String strHighlightedStyle = "-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;";
+        String strCurrentCellStyle = "";
+
+        strCurrentCellStyle = R1C1.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R1C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+            
+        strCurrentCellStyle = R1C2.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R1C2.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+
+        strCurrentCellStyle = R1C3.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+           R1C3.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R1C4.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+           R1C4.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+        strCurrentCellStyle = R1C5.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R1C5.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R1C6.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {            
+            R1C6.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R1C7.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R1C7.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R1C8.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R1C8.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R1C9.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R1C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+    
+
+        strCurrentCellStyle = R2C1.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R2C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+            
+        strCurrentCellStyle = R2C2.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R2C2.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+
+        strCurrentCellStyle = R2C3.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+           R2C3.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R2C4.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+           R2C4.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+        strCurrentCellStyle = R2C5.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R2C5.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R2C6.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {            
+            R2C6.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R2C7.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R2C7.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R2C8.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R2C8.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R2C9.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R2C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+
+        
+        strCurrentCellStyle = R3C1.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R3C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+            
+        strCurrentCellStyle = R3C2.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R3C2.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+
+        strCurrentCellStyle = R3C3.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+           R3C3.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R3C4.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+           R3C4.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+        strCurrentCellStyle = R3C5.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R3C5.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R3C6.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {            
+            R3C6.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R3C7.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R3C7.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R3C8.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R3C8.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R3C9.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R3C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+
+        strCurrentCellStyle = R4C1.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R4C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+            
+        strCurrentCellStyle = R4C2.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R4C2.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+
+        strCurrentCellStyle = R4C3.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+           R4C3.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R4C4.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+           R4C4.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+        strCurrentCellStyle = R4C5.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R4C5.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R4C6.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {            
+            R4C6.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R4C7.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R4C7.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R4C8.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R4C8.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R4C9.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R4C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+        
+
+        strCurrentCellStyle = R5C1.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R5C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+            
+        strCurrentCellStyle = R5C2.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R5C2.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+
+        strCurrentCellStyle = R5C3.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+           R5C3.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R5C4.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+           R5C4.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+        strCurrentCellStyle = R5C5.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R5C5.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R5C6.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {            
+            R5C6.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R5C7.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R5C7.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R5C8.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R5C8.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R5C9.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R5C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+
+        strCurrentCellStyle = R6C1.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R6C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+            
+        strCurrentCellStyle = R6C2.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R6C2.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+
+        strCurrentCellStyle = R6C3.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+           R6C3.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R6C4.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+           R6C4.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+        strCurrentCellStyle = R6C5.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R6C5.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R6C6.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {            
+            R6C6.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R6C7.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R6C7.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R6C8.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R6C8.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R6C9.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R6C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+
+        
+        strCurrentCellStyle = R7C1.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R7C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+            
+        strCurrentCellStyle = R7C2.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R7C2.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+
+        strCurrentCellStyle = R7C3.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+           R7C3.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R7C4.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+           R7C4.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+        strCurrentCellStyle = R7C5.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R7C5.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R7C6.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {            
+            R7C6.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R7C7.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R7C7.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R7C8.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R7C8.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R7C9.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R7C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+
+        strCurrentCellStyle = R8C1.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R8C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+            
+        strCurrentCellStyle = R8C2.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R8C2.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+
+        strCurrentCellStyle = R8C3.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+           R8C3.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R8C4.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+           R8C4.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+        strCurrentCellStyle = R8C5.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R8C5.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R8C6.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {            
+            R8C6.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R8C7.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R8C7.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R8C8.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R8C8.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R8C9.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R8C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+
+        strCurrentCellStyle = R9C1.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R9C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+            
+        strCurrentCellStyle = R9C2.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R9C2.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
+        }        
+
+        strCurrentCellStyle = R9C3.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+           R9C3.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R9C4.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+           R9C4.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+        strCurrentCellStyle = R9C5.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R9C5.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R9C6.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {            
+            R9C6.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R9C7.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R9C7.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R9C8.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
+            R9C8.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+
+        strCurrentCellStyle = R9C9.getStyle();
+        if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
+            R9C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+        }
+        
+        
+        
+    }
+
     /**
      * This inner class adds an event handler to each of the text boxes so that when
      * they are clicked, the fx:id of the text box is shown below
@@ -373,10 +1095,9 @@ public class FXMLDocumentController implements Initializable {
     private class MouseExitedEventHandler implements EventHandler<Event> {
         @Override
         public void handle(Event e) {
-            System.out.println("Cell: " + ((Control)e.getSource()).getId());
-
-            String controlName = ((Control)e.getSource()).getId().toString();
-            switch (controlName) {
+            //System.out.println("Cell: " + ((Control)e.getSource()).getId());
+            String strControlName = ((Control)e.getSource()).getId().toString();
+            switch (strControlName) {
                 case "R1C1":
                     if(validateText(R1C1.getText().toString())==false) {
                         R1C1.setText("");
@@ -877,10 +1598,12 @@ public class FXMLDocumentController implements Initializable {
         }
 
         private void changeStyle(TextField cell) {
-            if(cell.getText().isEmpty()) {
-                cell.setStyle("-fx-background-color:  white; -fx-border-color: silver; -fx-text-fill: black; -fx-font-size: 17;");
-            } else {
-                cell.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+            if(!hasGameStarted){
+                if(cell.getText().isEmpty()) {
+                    cell.setStyle("-fx-background-color:  white; -fx-border-color: silver; -fx-text-fill: black; -fx-font-size: 17;");
+                } else {
+                    cell.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+                }                
             }
         }        
 
