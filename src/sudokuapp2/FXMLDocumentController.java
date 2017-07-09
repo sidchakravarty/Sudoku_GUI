@@ -11,13 +11,19 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -34,6 +40,8 @@ public class FXMLDocumentController implements Initializable {
     private List<TextField> myCells;
     private Iterator<TextField> it;
     private int[][] sudoku_grid = new int [9][9];
+    private String strGameMode = "";
+    private String[] strTargetCells = new String[27];
     
     // PANE
     @FXML
@@ -41,6 +49,21 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private ComboBox<String> cmb_selectMethod;
+    
+    @FXML
+    private Button btn_CheckResult;
+    
+    @FXML
+    private Button btn_Start;
+    
+    @FXML
+    private Button btn_Stop;
+    
+    @FXML
+    private Button btn_ShowOptions;
+    
+    @FXML
+    private ListView<Integer> lst_options;
     
     // ROW 1
     @FXML
@@ -220,7 +243,19 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TextField R9C8;
     @FXML
-    private TextField R9C9;          
+    private TextField R9C9;       
+    
+    @FXML
+    private void stopGame (Event e) {
+        btn_Start.setDisable(false);
+        btn_Stop.setDisable(true);
+        lst_options.setDisable(true);
+        btn_CheckResult.setDisable(true);
+        cmb_selectMethod.setDisable(false);
+        hasGameStarted = false;
+        resetBoard();
+        resetHighlights();
+     }
 
    /**
     * Purpose: This method prints traverses through all the cells in the Sudoku
@@ -262,7 +297,6 @@ public class FXMLDocumentController implements Initializable {
                     blnColumn=false;
                 } else {
                     strSudokuBoard = strSudokuBoard + " " + Integer.toString(sudoku_grid[i][j]);                    
-                    //System.out.print(" " + sudoku_grid[i][j]);                    
                 }
                 if (j == 8) {
                     System.out.println(strSudokuBoard);
@@ -271,6 +305,12 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         }
+        strGameMode = cmb_selectMethod.getSelectionModel().getSelectedItem();
+        System.out.println("Game Mode: " + strGameMode);
+        
+        btn_Stop.setDisable(false);
+        btn_Start.setDisable(true);
+        cmb_selectMethod.setDisable(true);
     }
     
     @Override
@@ -468,13 +508,34 @@ public class FXMLDocumentController implements Initializable {
         
         // Add Combo Box options
         String[] strOptions = {
-           "Manual", "Simple", "AI"
+           "Manual", "Uninformed Search", "Minimum Remaining Values"
        };
         try {
             cmb_selectMethod.getItems().addAll(strOptions);            
         } catch(Exception e) {
             System.err.println(e.getMessage());
         }
+        
+        cmb_selectMethod.valueProperty().addListener(new ChangeListener<String>(){
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                switch(newValue) {
+                    case "Manual":
+                        btn_CheckResult.setDisable(false);
+                        break;
+                    case "Uninformed Search":
+                        btn_CheckResult.setDisable(true);                
+                        break;
+                    case "Minimum Remaining Values":
+                        btn_CheckResult.setDisable(true);                
+                        break;
+                }                
+            }
+        });
+        
+        btn_Stop.setDisable(true);
+        //lst_options.setDisable(true);
+        btn_CheckResult.setDisable(true);
     }    
     
     /**
@@ -500,12 +561,24 @@ public class FXMLDocumentController implements Initializable {
         }
         return Collections.unmodifiableList(elements);
     }
+
+    private void resetBoard() {
+        it = myCells.iterator();
+        while (it.hasNext()) {
+            it.next().setText("");
+        }
+        
+        it = myCells.iterator();
+        while (it.hasNext()) {
+            it.next().setStyle("-fx-background-color:  white; -fx-border-color: silver; -fx-text-fill: black; -fx-font-size: 17;");
+        }
+        
+    }
     
     private class MouseClickedEventHandler implements EventHandler<Event> {
         @Override
         public void handle (Event e) {
 
-            String[] strTargetCells = new String[27];
             if(hasGameStarted) {
                 String strStyle = "";
                 resetHighlights();
@@ -514,21 +587,45 @@ public class FXMLDocumentController implements Initializable {
                 target = getNodesOfType(mainPane, TextField.class);
                 for(TextField t : target) {
                     strStyle = t.getStyle();
-                    System.out.println("Cell Style: " + t.getId() + " - " + strStyle);
+                    System.out.println("Cell Style: " + t.getId() + " - " + t.getText() +" - " + strStyle);
                     if(!strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
                         for(int i = 0; i < strTargetCells.length; i++) {
                             if(strTargetCells[i] != null) {
                                 if(t.getId().contains(strTargetCells[i])) {
-                                    t.setStyle("-fx-background-color: RGB(162,100,100); -fx-opacity: 0.7; -fx-border-color: silver");  
+                                    t.setStyle("-fx-background-color: RGB(162,100,100); -fx-opacity: 0.7; -fx-border-color: silver");
                                     break;
                                 }                                    
                             }
                         }                        
                     }
                 }
+                populateOptions();
             }
         } 
-
+        
+        /**
+        * <br>
+        * <h3 style="color:white;">CLASS: FXMLDocumentController </h3>
+        * <HR>
+        * <h3 style="color:white;">PARAMETERS: None</h3>
+        *      <blockquote><i>a. strControlName - String name the cell that was selected by the user (e.g., R1C1)</i></blockquote>  
+        * <HR>
+        * <h3 style="color:white;">VARIABLES: </h3>
+        *      <blockquote><i>a. strTargetCells - Array of all target cells that are impacted by the target cell (Row / Col / Block)</i></blockquote>
+        *      <blockquote><i>b. strC - The name of the target column</i></blockquote>
+        *      <blockquote><i>c. strR - The name of the target row</i></blockquote>
+        *      <blockquote><i>d. r - Integer row </i></blockquote>
+        *      <blockquote><i>e. c - Integer column</i></blockquote>
+        * <HR>
+        * <h3 style="color:white;">PURPOSE: </h3>
+        * <pre>
+        When the user clicks on a specific Sudoku cell, this method will
+        highlight the row, column and the block that the target cell belongs to
+        While it is doing that the array blnOptions will get populated based on
+        existing values. This information will then be used by the Observable List
+        'options' to populate the listview lst_options. The contents of the 
+        observable list will be only those values that the user can select</pre>
+        */
         private String[] createHighlightArray(String strControlName) {
             String[] strTargetCells = new String[27];
             String strC = strControlName.substring(2);
@@ -1625,5 +1722,50 @@ public class FXMLDocumentController implements Initializable {
             return true;
         }
     }
+
+
+    private void populateOptions() {
+        String strStyle = "";
+        boolean [] blnOptions = new boolean[9];  // This list will feed the observable list 
+                         // for list view. It will show possible values.
+        ObservableList<Integer> options = FXCollections.observableArrayList();
+
+        // reset the boolean array so that in subsequent uses, it does not provide misleading results
+
+        int intValue = 0;
+        boolean blnBlankCell = true;
+        options.removeAll();         
+
+        for (TextField t : target) {
+            for(int i = 0; i < strTargetCells.length; i++) {
+                if(t.getId().contains(strTargetCells[i])) {
+                    strStyle = t.getStyle();
+                    if(!strStyle.contains("-fx-background-color: white;")) {
+                        try {
+                           intValue = Integer.parseInt(t.getText());
+                           blnBlankCell = false;
+                        } catch (NumberFormatException nfe) {
+                            System.err.println("Number Format Exception: " + nfe.getMessage());
+                            intValue=0;
+                            blnBlankCell = true;
+                        }
+                        if(intValue != 0 && blnBlankCell == false) {
+                            blnOptions[intValue-1] = true;
+                        }                           
+                    }
+                    break;
+                }                                    
+            }
+        }
+        
+        for (int i = 0; i < 9; i++) {
+            if(!blnOptions[i]) {
+                options.add(i + 1);
+            }
+        }
+        lst_options.getItems().clear();
+        lst_options.setItems(options);            
+    }    
+    
 }
 
