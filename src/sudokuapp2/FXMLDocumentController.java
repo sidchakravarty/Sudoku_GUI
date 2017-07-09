@@ -1,8 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+    PROGRAM     : Sudoku App (using AI)
+    PURPOSE     : This game is allows users to select the following three modes
+                  to play Sudoku
+                  a. Manual - No intelligence
+                  b. Uninformed Search
+                  c. Minimum Remaining Values
+    PROGRAMMER  : Sid Chakravarty
+    DATE        : 07.09.2017
+    
+    UNIVERSTIY  : University of Illinois (Springfield)
+    COURSE      : CSC 479A - Introduction to Artificial Intelligence
+*/
 package sudokuapp2;
 
 import java.net.URL;
