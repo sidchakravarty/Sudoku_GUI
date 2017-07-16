@@ -31,7 +31,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -72,6 +74,12 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private ListView<Integer> lst_options;
+    
+    @FXML
+    private TableView<History> tbl_History = new TableView<> ();
+    
+    @FXML
+    private Label lbl_ShowResults = new Label();
     
     // ROW 1
     @FXML
