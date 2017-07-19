@@ -13,12 +13,18 @@
 */
 package sudokuapp2;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -52,6 +58,8 @@ public class FXMLDocumentController implements Initializable {
     private int[][] sudoku_grid = new int [9][9];
     private String strGameMode = "";
     private String[] strTargetCells = new String[27];
+    private ObservableList<History> list = FXCollections.observableArrayList();
+    private String strSourcePuzzleFile;
     
     // PANE
     @FXML
@@ -59,6 +67,12 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private ComboBox<String> cmb_selectMethod;
+    
+    @FXML
+    private Button btn_loadpuzzle;
+    
+    @FXML
+    private ComboBox<String> cmb_showFiles;
     
     @FXML
     private Button btn_CheckResult;
@@ -262,6 +276,53 @@ public class FXMLDocumentController implements Initializable {
     private TextField R9C9;       
     
     @FXML
+    private void loadPuzzle(Event e) throws IOException {
+        String strFullPath = System.getProperty("user.dir");
+        strFullPath = strFullPath + "\\" + strSourcePuzzleFile;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(strFullPath));
+            String strLine;
+            while((strLine = br.readLine()) != null) {
+                System.out.println(strLine);
+                int intValues[] = new int[9];
+                    intValues = uploadPuzzle(strLine);
+            }
+        } catch (IOException ie) {
+            System.err.println("File IO Exception: " + ie.getMessage());
+            JOptionPane.showMessageDialog(null, "Error: " + ie.getMessage(), "File IO Error", JOptionPane.ERROR_MESSAGE);
+            btn_loadpuzzle.setDisable(true);
+        }
+    }
+    
+    private void showFiles() {
+        String strCurrentDirectory = System.getProperty("user.dir");
+        System.out.println("Current Directory: " + strCurrentDirectory);
+        try {
+            FilenameFilter textFilter = new FilenameFilter() {
+
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.toLowerCase().endsWith(".txt");
+                }
+            };
+            File f = new File(strCurrentDirectory);
+            File[] files = f.listFiles(textFilter);
+            int intLocal = 1;
+            ObservableList<String> options = FXCollections.observableArrayList();
+            for(File file : files) {
+                if(!file.isDirectory()) {
+                    System.out.println(intLocal + ". " + file.getName());
+                    options.add(file.getName());
+                    intLocal++;
+                }
+            }
+            cmb_showFiles.getItems().addAll(options);
+        } catch(Exception ioe) {
+            System.err.println("Error opening file: " + ioe);
+        }        
+    }
+    
+    @FXML
     private void stopGame (Event e) {
         btn_Start.setDisable(false);
         btn_Stop.setDisable(true);
@@ -332,7 +393,22 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         hasGameStarted = false;
-                
+        showFiles();
+        btn_loadpuzzle.setDisable(true);
+        cmb_showFiles.valueProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> ov, String oldValue, String newValue) {
+                if(!ov.equals("")) {
+                    strSourcePuzzleFile = ov.getValue();
+                    System.out.println("Source File: " + strSourcePuzzleFile);
+                    btn_loadpuzzle.setDisable(false);
+                } else {
+                    btn_loadpuzzle.setDisable(true);
+                }
+            }
+        });
+        
         R1C1.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
         R1C2.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
         R1C3.addEventHandler(MouseEvent.MOUSE_CLICKED, new MouseClickedEventHandler());
@@ -589,6 +665,34 @@ public class FXMLDocumentController implements Initializable {
             it.next().setStyle("-fx-background-color:  white; -fx-border-color: silver; -fx-text-fill: black; -fx-font-size: 17;");
         }
         
+    }
+
+    private int[] uploadPuzzle(String strLine) {
+        int intValues[] = new int[9];
+        char ch;
+        String strTemp = "";
+        strTemp = strLine;
+        int intTemp = 0;
+        int intCounter = 0;
+        do {
+            ch = (char) strTemp.charAt(0);
+            try {
+                intTemp = Character.getNumericValue(ch);
+                intValues[intCounter] = intTemp;
+                intCounter++;
+            } catch (NumberFormatException numberFormatException) {
+                //JOptionPane.showMessageDialog(null, "Error Parsing Data: " + numberFormatException, "Error Loading Puzzle", JOptionPane.ERROR_MESSAGE);
+                System.err.println("Error: " + numberFormatException.getMessage());
+                intValues[intCounter] = intTemp;
+                intCounter++;
+            }
+            try {
+                strTemp = strTemp.substring(2);
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+            }
+        } while(intCounter<9);
+        return intValues;
     }
     
     private class MouseClickedEventHandler implements EventHandler<Event> {

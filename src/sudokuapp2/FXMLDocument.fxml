@@ -560,28 +560,36 @@
       <Pane layoutX="60.0" layoutY="686.0" prefHeight="160.0" prefWidth="851.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="71.0">
          <children>
             <Button fx:id="btn_Start" layoutX="351.0" layoutY="6.0" mnemonicParsing="false" onAction="#startGame" prefHeight="31.0" prefWidth="116.0" text="Start Game" />
-            <Label layoutX="90.0" layoutY="6.0" prefHeight="17.0" prefWidth="86.0" text="Game Mode:">
+            <Label layoutX="88.0" layoutY="43.0" prefHeight="17.0" prefWidth="60.0" text="Game Mode:">
                <font>
                   <Font name="Arial" size="10.0" />
                </font></Label>
             <Button fx:id="btn_Stop" layoutX="473.0" layoutY="6.0" mnemonicParsing="false" onAction="#stopGame" prefHeight="31.0" prefWidth="116.0" text="End Game" />
-            <ComboBox fx:id="cmb_selectMethod" layoutX="155.0" layoutY="6.0" prefHeight="25.0" prefWidth="175.0" />
+            <ComboBox fx:id="cmb_selectMethod" layoutX="155.0" layoutY="39.0" prefHeight="25.0" prefWidth="185.0" />
             <Button fx:id="btn_CheckResult" layoutX="608.0" layoutY="6.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="116.0" text="Check Result" />
-            <ListView fx:id="lst_options" layoutX="155.0" layoutY="36.0" prefHeight="115.0" prefWidth="96.0" />
-            <Label layoutX="111.0" layoutY="36.0" prefHeight="17.0" prefWidth="44.0" text="Options:">
+            <ListView fx:id="lst_options" layoutX="155.0" layoutY="70.0" prefHeight="83.0" prefWidth="185.0" />
+            <Label layoutX="108.0" layoutY="72.0" prefHeight="17.0" prefWidth="44.0" text="Options:">
                <font>
                   <Font name="Arial" size="10.0" />
                </font>
             </Label>
-            <Label fx:id="lbl_CheckResults" layoutX="736.0" layoutY="13.0" prefHeight="17.0" prefWidth="107.0" text="Show Result" />
+            <Label fx:id="lbl_ShowResults" layoutX="736.0" layoutY="13.0" prefHeight="17.0" prefWidth="107.0" text="Show Result" />
             <TableView fx:id="tbl_History" layoutX="351.0" layoutY="39.0" prefHeight="115.0" prefWidth="492.0">
               <columns>
                 <TableColumn prefWidth="34.0" text="#" />
-                <TableColumn prefWidth="82.0" text="Cell" />
-                  <TableColumn prefWidth="109.0" text="Selected Value" />
-                  <TableColumn prefWidth="256.0" text="Remaining Values" />
+                <TableColumn prefWidth="60.0" text="Cell" />
+                  <TableColumn prefWidth="46.0" text="Value" />
+                  <TableColumn prefWidth="182.0" text="Remaining Values" />
+                  <TableColumn prefWidth="167.0" text="Used Values" />
               </columns>
             </TableView>
+            <Label layoutX="88.0" layoutY="13.0" prefHeight="17.0" prefWidth="60.0" text="Game Mode:">
+               <font>
+                  <Font name="Arial" size="10.0" />
+               </font>
+            </Label>
+            <Button fx:id="btn_loadpuzzle" layoutX="280.0" layoutY="9.0" mnemonicParsing="false" onAction="#loadPuzzle" prefHeight="25.0" prefWidth="60.0" text="Load" />
+            <ComboBox fx:id="cmb_showFiles" layoutX="155.0" layoutY="9.0" prefHeight="25.0" prefWidth="122.0" />
          </children>
       </Pane>
     </children>
