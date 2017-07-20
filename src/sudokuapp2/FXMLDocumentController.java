@@ -282,10 +282,53 @@ public class FXMLDocumentController implements Initializable {
         try {
             BufferedReader br = new BufferedReader(new FileReader(strFullPath));
             String strLine;
+            int intCounter = 0;
+            resetHighlights();
             while((strLine = br.readLine()) != null) {
                 System.out.println(strLine);
                 int intValues[] = new int[9];
                     intValues = uploadPuzzle(strLine);
+                    switch(intCounter) {
+                        
+                        case 0:
+                            transfer_row1(intValues);
+                            break;
+                            
+                        case 1:
+                            transfer_row2(intValues);
+                            break;
+                            
+                        case 2:
+                            transfer_row3(intValues);
+                            break;
+                            
+                        case 3:
+                            transfer_row4(intValues);
+                            break;
+                            
+                        case 4:
+                            transfer_row5(intValues);
+                            break;
+                            
+                        case 5:
+                            transfer_row6(intValues);
+                            break;
+                            
+                        case 6:
+                            transfer_row7(intValues);
+                            break;
+                            
+                        case 7:
+                            transfer_row8(intValues);
+                            break;
+                            
+                        case 8:
+                            transfer_row9(intValues);
+                            break;
+                        
+                    }
+                    
+                    intCounter++;
             }
         } catch (IOException ie) {
             System.err.println("File IO Exception: " + ie.getMessage());
@@ -694,7 +737,441 @@ public class FXMLDocumentController implements Initializable {
         } while(intCounter<9);
         return intValues;
     }
+
     
+    private void transfer_row1(int[] intValues) {
+        
+        if(intValues[0] != 0) {
+            R1C1.setText(Integer.toString(intValues[0]));
+            R1C1.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+
+        if(intValues[1] != 0) {
+            R1C2.setText(Integer.toString(intValues[1]));
+            R1C2.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[2] != 0) {
+            R1C3.setText(Integer.toString(intValues[2]));
+            R1C3.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[3] != 0) {
+            R1C4.setText(Integer.toString(intValues[3]));
+            R1C4.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[4] != 0) {
+            R1C5.setText(Integer.toString(intValues[4]));
+            R1C5.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[5] != 0) {
+            R1C6.setText(Integer.toString(intValues[5]));
+            R1C6.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[6] != 0) {
+            R1C7.setText(Integer.toString(intValues[6]));
+            R1C7.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[7] != 0) {
+            R1C8.setText(Integer.toString(intValues[7]));
+            R1C8.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[8] != 0) {
+            R1C9.setText(Integer.toString(intValues[8]));
+            R1C9.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }        
+    }    
+        
+    private void transfer_row2(int[] intValues) {
+        
+        if(intValues[0] != 0) {
+            R2C1.setText(Integer.toString(intValues[0]));
+            R2C1.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+
+        if(intValues[1] != 0) {
+            R2C2.setText(Integer.toString(intValues[1]));
+            R2C2.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[2] != 0) {
+            R2C3.setText(Integer.toString(intValues[2]));
+            R2C3.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[3] != 0) {
+            R2C4.setText(Integer.toString(intValues[3]));
+            R2C4.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[4] != 0) {
+            R2C5.setText(Integer.toString(intValues[4]));
+            R2C5.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[5] != 0) {
+            R2C6.setText(Integer.toString(intValues[5]));
+            R2C6.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[6] != 0) {
+            R2C7.setText(Integer.toString(intValues[6]));
+            R2C7.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[7] != 0) {
+            R2C8.setText(Integer.toString(intValues[7]));
+            R2C8.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[8] != 0) {
+            R2C9.setText(Integer.toString(intValues[8]));
+            R2C9.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }        
+    }    
+    
+    private void transfer_row3(int[] intValues) {
+        
+        if(intValues[0] != 0) {
+            R3C1.setText(Integer.toString(intValues[0]));
+            R3C1.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+
+        if(intValues[1] != 0) {
+            R3C2.setText(Integer.toString(intValues[1]));
+            R3C2.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[2] != 0) {
+            R3C3.setText(Integer.toString(intValues[2]));
+            R3C3.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[3] != 0) {
+            R3C4.setText(Integer.toString(intValues[3]));
+            R3C4.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[4] != 0) {
+            R3C5.setText(Integer.toString(intValues[4]));
+            R3C5.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[5] != 0) {
+            R3C6.setText(Integer.toString(intValues[5]));
+            R3C6.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[6] != 0) {
+            R3C7.setText(Integer.toString(intValues[6]));
+            R3C7.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[7] != 0) {
+            R3C8.setText(Integer.toString(intValues[7]));
+            R3C8.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[8] != 0) {
+            R3C9.setText(Integer.toString(intValues[8]));
+            R3C9.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }        
+    }        
+
+    private void transfer_row4(int[] intValues) {
+        
+        if(intValues[0] != 0) {
+            R4C1.setText(Integer.toString(intValues[0]));
+            R4C1.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+
+        if(intValues[1] != 0) {
+            R4C2.setText(Integer.toString(intValues[1]));
+            R4C2.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[2] != 0) {
+            R4C3.setText(Integer.toString(intValues[2]));
+            R4C3.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[3] != 0) {
+            R4C4.setText(Integer.toString(intValues[3]));
+            R4C4.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[4] != 0) {
+            R4C5.setText(Integer.toString(intValues[4]));
+            R4C5.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[5] != 0) {
+            R4C6.setText(Integer.toString(intValues[5]));
+            R4C6.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[6] != 0) {
+            R4C7.setText(Integer.toString(intValues[6]));
+            R4C7.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[7] != 0) {
+            R4C8.setText(Integer.toString(intValues[7]));
+            R4C8.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[8] != 0) {
+            R4C9.setText(Integer.toString(intValues[8]));
+            R4C9.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }        
+    }       
+       
+    private void transfer_row5(int[] intValues) {
+        
+        if(intValues[0] != 0) {
+            R5C1.setText(Integer.toString(intValues[0]));
+            R5C1.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+
+        if(intValues[1] != 0) {
+            R5C2.setText(Integer.toString(intValues[1]));
+            R5C2.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[2] != 0) {
+            R5C3.setText(Integer.toString(intValues[2]));
+            R5C3.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[3] != 0) {
+            R5C4.setText(Integer.toString(intValues[3]));
+            R5C4.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[4] != 0) {
+            R5C5.setText(Integer.toString(intValues[4]));
+            R5C5.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[5] != 0) {
+            R5C6.setText(Integer.toString(intValues[5]));
+            R5C6.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[6] != 0) {
+            R5C7.setText(Integer.toString(intValues[6]));
+            R5C7.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[7] != 0) {
+            R5C8.setText(Integer.toString(intValues[7]));
+            R5C8.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[8] != 0) {
+            R5C9.setText(Integer.toString(intValues[8]));
+            R5C9.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }        
+    }        
+
+    private void transfer_row6(int[] intValues) {
+        
+        if(intValues[0] != 0) {
+            R6C1.setText(Integer.toString(intValues[0]));
+            R6C1.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+
+        if(intValues[1] != 0) {
+            R6C2.setText(Integer.toString(intValues[1]));
+            R6C2.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[2] != 0) {
+            R6C3.setText(Integer.toString(intValues[2]));
+            R6C3.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[3] != 0) {
+            R6C4.setText(Integer.toString(intValues[3]));
+            R6C4.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[4] != 0) {
+            R6C5.setText(Integer.toString(intValues[4]));
+            R6C5.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[5] != 0) {
+            R6C6.setText(Integer.toString(intValues[5]));
+            R6C6.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[6] != 0) {
+            R6C7.setText(Integer.toString(intValues[6]));
+            R6C7.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[7] != 0) {
+            R6C8.setText(Integer.toString(intValues[7]));
+            R6C8.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[8] != 0) {
+            R6C9.setText(Integer.toString(intValues[8]));
+            R6C9.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }        
+    }    
+   
+    private void transfer_row7(int[] intValues) {
+        
+        if(intValues[0] != 0) {
+            R7C1.setText(Integer.toString(intValues[0]));
+            R7C1.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+
+        if(intValues[1] != 0) {
+            R7C2.setText(Integer.toString(intValues[1]));
+            R7C2.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[2] != 0) {
+            R7C3.setText(Integer.toString(intValues[2]));
+            R7C3.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[3] != 0) {
+            R7C4.setText(Integer.toString(intValues[3]));
+            R7C4.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[4] != 0) {
+            R7C5.setText(Integer.toString(intValues[4]));
+            R7C5.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[5] != 0) {
+            R7C6.setText(Integer.toString(intValues[5]));
+            R7C6.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[6] != 0) {
+            R7C7.setText(Integer.toString(intValues[6]));
+            R7C7.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[7] != 0) {
+            R7C8.setText(Integer.toString(intValues[7]));
+            R7C8.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[8] != 0) {
+            R7C9.setText(Integer.toString(intValues[8]));
+            R7C9.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }        
+    }       
+   
+    private void transfer_row8(int[] intValues) {
+        
+        if(intValues[0] != 0) {
+            R8C1.setText(Integer.toString(intValues[0]));
+            R8C1.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+
+        if(intValues[1] != 0) {
+            R8C2.setText(Integer.toString(intValues[1]));
+            R8C2.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[2] != 0) {
+            R8C3.setText(Integer.toString(intValues[2]));
+            R8C3.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[3] != 0) {
+            R8C4.setText(Integer.toString(intValues[3]));
+            R8C4.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[4] != 0) {
+            R8C5.setText(Integer.toString(intValues[4]));
+            R8C5.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[5] != 0) {
+            R8C6.setText(Integer.toString(intValues[5]));
+            R8C6.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[6] != 0) {
+            R8C7.setText(Integer.toString(intValues[6]));
+            R8C7.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[7] != 0) {
+            R8C8.setText(Integer.toString(intValues[7]));
+            R8C8.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[8] != 0) {
+            R8C9.setText(Integer.toString(intValues[8]));
+            R8C9.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }        
+    }
+
+    private void transfer_row9(int[] intValues) {
+        
+        if(intValues[0] != 0) {
+            R9C1.setText(Integer.toString(intValues[0]));
+            R9C1.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+
+        if(intValues[1] != 0) {
+            R9C2.setText(Integer.toString(intValues[1]));
+            R9C2.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[2] != 0) {
+            R9C3.setText(Integer.toString(intValues[2]));
+            R9C3.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[3] != 0) {
+            R9C4.setText(Integer.toString(intValues[3]));
+            R9C4.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[4] != 0) {
+            R9C5.setText(Integer.toString(intValues[4]));
+            R9C5.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[5] != 0) {
+            R9C6.setText(Integer.toString(intValues[5]));
+            R9C6.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[6] != 0) {
+            R9C7.setText(Integer.toString(intValues[6]));
+            R9C7.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[7] != 0) {
+            R9C8.setText(Integer.toString(intValues[7]));
+            R9C8.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }
+        
+        if(intValues[8] != 0) {
+            R9C9.setText(Integer.toString(intValues[8]));
+            R9C9.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
+        }        
+    }    
+    
+   
     private class MouseClickedEventHandler implements EventHandler<Event> {
         @Override
         public void handle (Event e) {
