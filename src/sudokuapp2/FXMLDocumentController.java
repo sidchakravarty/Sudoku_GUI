@@ -24,11 +24,13 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,8 +41,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javax.swing.JOptionPane;
@@ -55,234 +59,687 @@ public class FXMLDocumentController implements Initializable {
     private List<TextField> target;
     private List<TextField> myCells;
     private Iterator<TextField> it;
+    private String[] strCells = new String[81];
     private int[][] sudoku_grid = new int [9][9];
     private String strGameMode = "";
     private String[] strTargetCells = new String[27];
-    private ObservableList<History> list = FXCollections.observableArrayList();
     private String strSourcePuzzleFile;
+    private Service<Void> backgroundThread;
+    private boolean blnFirstTimeStepMode = true;
+    private int intStepModeCounter = 0;
+    private final ObservableList<History> data = FXCollections.observableArrayList();
     
     // PANE
-    @FXML
-    private Pane mainPane;
-
-    @FXML
-    private ComboBox<String> cmb_selectMethod;
-    
-    @FXML
-    private Button btn_loadpuzzle;
-    
-    @FXML
-    private ComboBox<String> cmb_showFiles;
-    
-    @FXML
-    private Button btn_CheckResult;
-    
-    @FXML
-    private Button btn_Start;
-    
-    @FXML
-    private Button btn_Stop;
-    
-    @FXML
-    private Button btn_ShowOptions;
-    
-    @FXML
-    private ListView<Integer> lst_options;
-    
-    @FXML
-    private TableView<History> tbl_History = new TableView<> ();
-    
-    @FXML
-    private Label lbl_ShowResults = new Label();
+    @FXML private Pane mainPane; 
+    @FXML private ComboBox<String> cmb_selectMethod;
+    @FXML private Button btn_loadpuzzle;
+    @FXML private ComboBox<String> cmb_showFiles;
+    @FXML private Button btn_AutoPlay;
+    @FXML private Button btn_SingleStep;
+    @FXML private Button btn_Start;
+    @FXML private Button btn_Stop;
+    @FXML private Button btn_ShowOptions;
+    @FXML private ListView<Integer> lst_options;
+    @FXML private TableView<History> tbl_History;
+    @FXML private final Label lbl_ShowResults;
     
     // ROW 1
-    @FXML
-    private TextField R1C1;
-    @FXML
-    private TextField R1C2;
-    @FXML
-    private TextField R1C3;
-    @FXML
-    private TextField R1C4;
-    @FXML
-    private TextField R1C5;
-    @FXML
-    private TextField R1C6;
-    @FXML
-    private TextField R1C7;
-    @FXML
-    private TextField R1C8;
-    @FXML
-    private TextField R1C9;
+    @FXML private TextField R1C1;
+    @FXML private TextField R1C2;
+    @FXML private TextField R1C3;
+    @FXML private TextField R1C4;
+    @FXML private TextField R1C5;
+    @FXML private TextField R1C6;
+    @FXML private TextField R1C7;
+    @FXML private TextField R1C8;
+    @FXML private TextField R1C9;
 
     // ROW 2
-    @FXML
-    private TextField R2C1;
-    @FXML
-    private TextField R2C2;
-    @FXML
-    private TextField R2C3;
-    @FXML
-    private TextField R2C4;
-    @FXML
-    private TextField R2C5;
-    @FXML
-    private TextField R2C6;
-    @FXML
-    private TextField R2C7;
-    @FXML
-    private TextField R2C8;
-    @FXML
-    private TextField R2C9;
+    @FXML private TextField R2C1;
+    @FXML private TextField R2C2;
+    @FXML private TextField R2C3;
+    @FXML private TextField R2C4;
+    @FXML private TextField R2C5;
+    @FXML private TextField R2C6;
+    @FXML private TextField R2C7;
+    @FXML private TextField R2C8;
+    @FXML private TextField R2C9;
     
     // ROW 3
-    @FXML
-    private TextField R3C1;
-    @FXML
-    private TextField R3C2;
-    @FXML
-    private TextField R3C3;
-    @FXML
-    private TextField R3C4;
-    @FXML
-    private TextField R3C5;
-    @FXML
-    private TextField R3C6;
-    @FXML
-    private TextField R3C7;
-    @FXML
-    private TextField R3C8;
-    @FXML
-    private TextField R3C9;
+    @FXML private TextField R3C1;
+    @FXML private TextField R3C2;
+    @FXML private TextField R3C3;
+    @FXML private TextField R3C4;
+    @FXML private TextField R3C5;
+    @FXML private TextField R3C6;
+    @FXML private TextField R3C7;
+    @FXML private TextField R3C8;
+    @FXML private TextField R3C9;
     
     // ROW 4
-    @FXML
-    private TextField R4C1;
-    @FXML
-    private TextField R4C2;
-    @FXML
-    private TextField R4C3;
-    @FXML
-    private TextField R4C4;
-    @FXML
-    private TextField R4C5;
-    @FXML
-    private TextField R4C6;
-    @FXML
-    private TextField R4C7;
-    @FXML
-    private TextField R4C8;
-    @FXML
-    private TextField R4C9;
+    @FXML private TextField R4C1;
+    @FXML private TextField R4C2;
+    @FXML private TextField R4C3;
+    @FXML private TextField R4C4;
+    @FXML private TextField R4C5;
+    @FXML private TextField R4C6;
+    @FXML private TextField R4C7;
+    @FXML private TextField R4C8;
+    @FXML private TextField R4C9;
 
     // ROW 5
-    @FXML
-    private TextField R5C1;
-    @FXML
-    private TextField R5C2;
-    @FXML
-    private TextField R5C3;
-    @FXML
-    private TextField R5C4;
-    @FXML
-    private TextField R5C5;
-    @FXML
-    private TextField R5C6;
-    @FXML
-    private TextField R5C7;
-    @FXML
-    private TextField R5C8;
-    @FXML
-    private TextField R5C9;    
+    @FXML private TextField R5C1;
+    @FXML private TextField R5C2;
+    @FXML private TextField R5C3;
+    @FXML private TextField R5C4;
+    @FXML private TextField R5C5;
+    @FXML private TextField R5C6;
+    @FXML private TextField R5C7;
+    @FXML private TextField R5C8;
+    @FXML private TextField R5C9;    
     
     // ROW 6
-    @FXML
-    private TextField R6C1;
-    @FXML
-    private TextField R6C2;
-    @FXML
-    private TextField R6C3;
-    @FXML
-    private TextField R6C4;
-    @FXML
-    private TextField R6C5;
-    @FXML
-    private TextField R6C6;
-    @FXML
-    private TextField R6C7;
-    @FXML
-    private TextField R6C8;
-    @FXML
-    private TextField R6C9;    
+    @FXML private TextField R6C1;
+    @FXML private TextField R6C2;
+    @FXML private TextField R6C3;
+    @FXML private TextField R6C4;
+    @FXML private TextField R6C5;
+    @FXML private TextField R6C6;
+    @FXML private TextField R6C7;
+    @FXML private TextField R6C8;
+    @FXML private TextField R6C9;    
 
     // ROW 7
-    @FXML
-    private TextField R7C1;
-    @FXML
-    private TextField R7C2;
-    @FXML
-    private TextField R7C3;
-    @FXML
-    private TextField R7C4;
-    @FXML
-    private TextField R7C5;
-    @FXML
-    private TextField R7C6;
-    @FXML
-    private TextField R7C7;
-    @FXML
-    private TextField R7C8;
-    @FXML
-    private TextField R7C9;        
+    @FXML private TextField R7C1;
+    @FXML private TextField R7C2;
+    @FXML private TextField R7C3;
+    @FXML private TextField R7C4;
+    @FXML private TextField R7C5;
+    @FXML private TextField R7C6;
+    @FXML private TextField R7C7;
+    @FXML private TextField R7C8;
+    @FXML private TextField R7C9;        
 
     // ROW 8
-    @FXML
-    private TextField R8C1;
-    @FXML
-    private TextField R8C2;
-    @FXML
-    private TextField R8C3;
-    @FXML
-    private TextField R8C4;
-    @FXML
-    private TextField R8C5;
-    @FXML
-    private TextField R8C6;
-    @FXML
-    private TextField R8C7;
-    @FXML
-    private TextField R8C8;
-    @FXML
-    private TextField R8C9;          
+    @FXML private TextField R8C1;
+    @FXML private TextField R8C2;
+    @FXML private TextField R8C3;
+    @FXML private TextField R8C4;
+    @FXML private TextField R8C5;
+    @FXML private TextField R8C6;
+    @FXML private TextField R8C7;
+    @FXML private TextField R8C8;
+    @FXML private TextField R8C9;          
 
     // ROW 9
-    @FXML
-    private TextField R9C1;
-    @FXML
-    private TextField R9C2;
-    @FXML
-    private TextField R9C3;
-    @FXML
-    private TextField R9C4;
-    @FXML
-    private TextField R9C5;
-    @FXML
-    private TextField R9C6;
-    @FXML
-    private TextField R9C7;
-    @FXML
-    private TextField R9C8;
-    @FXML
-    private TextField R9C9;       
+    @FXML private TextField R9C1;
+    @FXML private TextField R9C2;
+    @FXML private TextField R9C3;
+    @FXML private TextField R9C4;
+    @FXML private TextField R9C5;
+    @FXML private TextField R9C6;
+    @FXML private TextField R9C7;
+    @FXML private TextField R9C8;
+    @FXML private TextField R9C9;       
+
+    public FXMLDocumentController() {
+        this.lbl_ShowResults = new Label();
+    }
     
-    @FXML
-    private void loadPuzzle(Event e) throws IOException {
+    @FXML private void solvePuzzle_SingleStep (Event e) {
+        try {
+            strGameMode = cmb_selectMethod.getSelectionModel().getSelectedItem();        
+            switch (strGameMode) {
+                case "Manual":
+                    JOptionPane.showMessageDialog(null, "To play game manually, "
+                            + "use the mouse to select each cell and then enter "
+                            + "one of the recommended values", "Initiate Game", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case "Uninformed Search":
+                    initiate_StepMode("Uninformed Search");
+                    break;
+                case "Minimum Remaining Values": 
+                    initiate_StepMode("Minimum Remaining Values");
+                    break;
+            }
+        } catch (NullPointerException npe) {
+                JOptionPane.showMessageDialog(null, "Please select a Game Mode.", "Initiate Game", JOptionPane.INFORMATION_MESSAGE);  
+                cmb_selectMethod.requestFocus();
+                System.err.println("Error: " + npe.getMessage());
+        }
+    }
+
+    private void initiate_StepMode(String strMode) {
+        
+        if(blnFirstTimeStepMode) {
+            blnFirstTimeStepMode = false;
+            myCells = getNodesOfType(mainPane, TextField.class);
+            it = myCells.iterator();   
+            int intLocalCount = 0;
+            while(it.hasNext()) {
+                strCells[intLocalCount] = it.next().getId();
+                intLocalCount++;
+            }
+        }             
+        switch (strMode){
+            case "Uninformed Search":
+                String strStyle;
+                target = getNodesOfType(mainPane, TextField.class);
+                for (TextField t : target) {
+                    strStyle = t.getStyle();
+                    if(t.getId().contains(strCells[intStepModeCounter])) {
+                        if(!strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
+                              play_mode_uninformed_search(strCells[intStepModeCounter]);
+                              try {
+                                  int intValue = lst_options.getItems().get(0);
+                                  addValue(intValue, strCells[intStepModeCounter]);
+                                  addToTableView(intValue, strCells[intStepModeCounter], intStepModeCounter);
+                                  break;
+                              } catch (Exception e) {
+                                  System.err.println("Error: " + e.getMessage());
+                                  break;
+                              }                        
+                          }
+                    }                       
+                }
+                
+                intStepModeCounter++;
+                break;
+                
+            case "Minimum Remaining Values":
+                play_mode_mrv();
+                break;
+        }
+    }
+    
+    private void play_mode_uninformed_search(String strCell) {
+        String strStyle;        
+        if(strCell.length()>0) {
+            resetHighlights();
+            strTargetCells = createHighlightArray(strCell);
+            target = getNodesOfType(mainPane, TextField.class);
+            for(TextField t : target) {
+                strStyle = t.getStyle();
+                System.out.println("Cell Style: " + t.getId() + " - " + t.getText() +" - " + strStyle);
+                if(!strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
+                    for(int i = 0; i < strTargetCells.length; i++) {
+                        if(strTargetCells[i] != null) {
+                            if(t.getId().contains(strTargetCells[i])) {
+                                t.setStyle("-fx-background-color: RGB(162,100,100); -fx-opacity: 0.7; -fx-border-color: silver");
+                                break;
+                            }                                    
+                        }
+                    }                        
+                }
+            }
+            populateOptions();
+        }       
+    }
+    
+    private void play_mode_mrv() {
+        
+    }
+
+    private void addValue(int intValue, String strCell) {
+        switch (strCell) {
+            // Row 1
+            case "R1C1":
+                R1C1.setText(Integer.toString(intValue));
+                break;
+            case "R1C2":
+                R1C2.setText(Integer.toString(intValue));
+                break;
+            case "R1C3":
+                R1C3.setText(Integer.toString(intValue));
+                break;
+            case "R1C4":
+                R1C4.setText(Integer.toString(intValue));
+                break;
+            case "R1C5":
+                R1C5.setText(Integer.toString(intValue));
+                break;
+            case "R1C6":
+                R1C6.setText(Integer.toString(intValue));
+                break;
+            case "R1C7":
+                R1C7.setText(Integer.toString(intValue));
+                break;
+            case "R1C8":
+                R1C8.setText(Integer.toString(intValue));
+                break;
+            case "R1C9":
+                R1C9.setText(Integer.toString(intValue));
+                break;
+
+            // Row 2
+            case "R2C1":
+                R2C1.setText(Integer.toString(intValue));
+                break;
+            case "R2C2":
+                R2C2.setText(Integer.toString(intValue));
+                break;
+            case "R2C3":
+                R2C3.setText(Integer.toString(intValue));
+                break;
+            case "R2C4":
+                R2C4.setText(Integer.toString(intValue));
+                break;
+            case "R2C5":
+                R2C5.setText(Integer.toString(intValue));
+                break;
+            case "R2C6":
+                R2C6.setText(Integer.toString(intValue));
+                break;
+            case "R2C7":
+                R2C7.setText(Integer.toString(intValue));
+                break;
+            case "R2C8":
+                R2C8.setText(Integer.toString(intValue));
+                break;
+            case "R2C9":
+                R2C9.setText(Integer.toString(intValue));
+                break;
+
+            // Row 3                
+            case "R3C1":
+                R3C1.setText(Integer.toString(intValue));
+                break;
+            case "R3C2":
+                R3C2.setText(Integer.toString(intValue));
+                break;
+            case "R3C3":
+                R3C3.setText(Integer.toString(intValue));
+                break;
+            case "R3C4":
+                R3C4.setText(Integer.toString(intValue));
+                break;
+            case "R3C5":
+                R3C5.setText(Integer.toString(intValue));
+                break;
+            case "R3C6":
+                R3C6.setText(Integer.toString(intValue));
+                break;
+            case "R3C7":
+                R3C7.setText(Integer.toString(intValue));
+                break;
+            case "R3C8":
+                R3C8.setText(Integer.toString(intValue));
+                break;
+            case "R3C9":
+                R3C9.setText(Integer.toString(intValue));
+                break;
+
+            // Row 4                
+            case "R4C1":
+                R4C1.setText(Integer.toString(intValue));
+                break;
+            case "R4C2":
+                R4C2.setText(Integer.toString(intValue));
+                break;
+            case "R4C3":
+                R4C3.setText(Integer.toString(intValue));
+                break;
+            case "R4C4":
+                R4C4.setText(Integer.toString(intValue));
+                break;
+            case "R4C5":
+                R4C5.setText(Integer.toString(intValue));
+                break;
+            case "R4C6":
+                R4C6.setText(Integer.toString(intValue));
+                break;
+            case "R4C7":
+                R4C7.setText(Integer.toString(intValue));
+                break;
+            case "R4C8":
+                R4C8.setText(Integer.toString(intValue));
+                break;
+            case "R4C9":
+                R4C9.setText(Integer.toString(intValue));
+                break;
+
+            // Row 5                
+            case "R5C1":
+                R5C1.setText(Integer.toString(intValue));
+                break;
+            case "R5C2":
+                R5C2.setText(Integer.toString(intValue));
+                break;
+            case "R5C3":
+                R5C3.setText(Integer.toString(intValue));
+                break;
+            case "R5C4":
+                R5C4.setText(Integer.toString(intValue));
+                break;
+            case "R5C5":
+                R5C5.setText(Integer.toString(intValue));
+                break;
+            case "R5C6":
+                R5C6.setText(Integer.toString(intValue));
+                break;
+            case "R5C7":
+                R5C7.setText(Integer.toString(intValue));
+                break;
+            case "R5C8":
+                R5C8.setText(Integer.toString(intValue));
+                break;
+            case "R5C9":
+                R5C9.setText(Integer.toString(intValue));
+                break;
+
+            // Row 6
+            case "R6C1":
+                R6C1.setText(Integer.toString(intValue));
+                break;
+            case "R6C2":
+                R6C2.setText(Integer.toString(intValue));
+                break;
+            case "R6C3":
+                R6C3.setText(Integer.toString(intValue));
+                break;
+            case "R6C4":
+                R6C4.setText(Integer.toString(intValue));
+                break;
+            case "R6C5":
+                R6C5.setText(Integer.toString(intValue));
+                break;
+            case "R6C6":
+                R6C6.setText(Integer.toString(intValue));
+                break;
+            case "R6C7":
+                R6C7.setText(Integer.toString(intValue));
+                break;
+            case "R6C8":
+                R6C8.setText(Integer.toString(intValue));
+                break;
+            case "R6C9":
+                R6C9.setText(Integer.toString(intValue));
+                break;
+
+            // Row 7                
+            case "R7C1":
+                R7C1.setText(Integer.toString(intValue));
+                break;
+            case "R7C2":
+                R7C2.setText(Integer.toString(intValue));
+                break;
+            case "R7C3":
+                R7C3.setText(Integer.toString(intValue));
+                break;
+            case "R7C4":
+                R7C4.setText(Integer.toString(intValue));
+                break;
+            case "R7C5":
+                R7C5.setText(Integer.toString(intValue));
+                break;
+            case "R7C6":
+                R7C6.setText(Integer.toString(intValue));
+                break;
+            case "R7C7":
+                R7C7.setText(Integer.toString(intValue));
+                break;
+            case "R7C8":
+                R7C8.setText(Integer.toString(intValue));
+                break;
+            case "R7C9":
+                R7C9.setText(Integer.toString(intValue));
+                break;
+
+            // Row 8                
+            case "R8C1":
+                R8C1.setText(Integer.toString(intValue));
+                break;
+            case "R8C2":
+                R8C2.setText(Integer.toString(intValue));
+                break;
+            case "R8C3":
+                R8C3.setText(Integer.toString(intValue));
+                break;
+            case "R8C4":
+                R8C4.setText(Integer.toString(intValue));
+                break;
+            case "R8C5":
+                R8C5.setText(Integer.toString(intValue));
+                break;
+            case "R8C6":
+                R8C6.setText(Integer.toString(intValue));
+                break;
+            case "R8C7":
+                R8C7.setText(Integer.toString(intValue));
+                break;
+            case "R8C8":
+                R8C8.setText(Integer.toString(intValue));
+                break;
+            case "R8C9":
+                R8C9.setText(Integer.toString(intValue));
+                break;
+
+            // Row 9                
+            case "R9C1":
+                R9C1.setText(Integer.toString(intValue));
+                break;
+            case "R9C2":
+                R9C2.setText(Integer.toString(intValue));
+                break;
+            case "R9C3":
+                R9C3.setText(Integer.toString(intValue));
+                break;
+            case "R9C4":
+                R9C4.setText(Integer.toString(intValue));
+                break;
+            case "R9C5":
+                R9C5.setText(Integer.toString(intValue));
+                break;
+            case "R9C6":
+                R9C6.setText(Integer.toString(intValue));
+                break;
+            case "R9C7":
+                R9C7.setText(Integer.toString(intValue));
+                break;
+            case "R9C8":
+                R9C8.setText(Integer.toString(intValue));
+                break;
+            case "R9C9":
+                R9C9.setText(Integer.toString(intValue));
+                break;
+        }
+    }    
+    
+    // JavaFX Concurrence Error
+    @FXML private void solvePuzzle_AutoMode (Event e) throws InterruptedException {
+ 
+            myCells = getNodesOfType(mainPane, TextField.class);
+            it = myCells.iterator();
+            backgroundThread = new Service<Void>() {
+
+            @Override
+            protected Task<Void> createTask() {
+                
+                return new Task<Void>() {
+
+                    @Override
+                    protected Void call() throws Exception {
+                        String strCellID;
+                        String strStyle;
+                        while (it.hasNext()) {
+                            strCellID = it.next().getId();
+                            if(strCellID.length()>0) {
+                                resetHighlights();
+                                strTargetCells = createHighlightArray(strCellID);
+                                target = getNodesOfType(mainPane, TextField.class);
+                                for(TextField t : target) {
+                                    strStyle = t.getStyle();
+                                    System.out.println("Cell Style: " + t.getId() + " - " + t.getText() +" - " + strStyle);
+                                    if(!strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
+                                        for(int i = 0; i < strTargetCells.length; i++) {
+                                            if(strTargetCells[i] != null) {
+                                                if(t.getId().contains(strTargetCells[i])) {
+                                                    t.setStyle("-fx-background-color: RGB(162,100,100); -fx-opacity: 0.7; -fx-border-color: silver");
+                                                    break;
+                                                }                                    
+                                            }
+                                        }                        
+                                    }
+                                }
+                                populateOptions();
+                                //System.out.println("Cell ID: " + strCellID);                
+                            }
+                        }                         
+                        return null;
+                    }
+                };
+            }
+        };
+            
+            backgroundThread.setOnSucceeded((WorkerStateEvent event) -> {
+                System.out.println("Done!");
+            });
+            
+            backgroundThread.restart();
+    }
+
+    private String[] createHighlightArray(String strControlName) {
+        String[] strTargetCells = new String[27];
+        String strC = strControlName.substring(2);
+        String strR = strControlName.substring(0, 2);
+        int r = Integer.parseInt(strR.substring(1));
+        int c = Integer.parseInt(strC.substring(1));
+
+        // For Rows 
+        int counter = 0;
+        for (int i=1; i < 10; i++) {
+            strTargetCells[counter] = strR + "C" + i;
+            counter++;
+        }
+
+        // For Cols
+        for (int i=1; i < 10; i++) {
+            strTargetCells[counter] = "R" + i + strC;
+            counter++;
+        }            
+
+        // For Block
+
+        // TOP LEFT
+        if(r >= 1 && r <= 3) {
+            if (c >= 1 && c <= 3) {
+                for (int i = 1; i <=3; i++) {
+                    for (int j = 1; j <= 3; j++) {
+                        strTargetCells[counter] = "R" + i + "C" + j;
+                        counter++;
+                    }
+                }
+            }
+        }
+
+        // TOP CENTER
+        if(r >= 1 && r <= 3) {
+            if (c >= 4 && c <= 6) {
+                for (int i = 1; i <=3; i++) {
+                    for (int j = 4; j <= 6; j++) {
+                        strTargetCells[counter] = "R" + i + "C" + j;
+                        counter++;
+                    }
+                }
+            }
+        }            
+
+        // TOP RIGHT
+        if(r >= 1 && r <= 3) {
+            if (c >= 7 && c <= 9) {
+                for (int i = 1; i <=3; i++) {
+                    for (int j = 7; j <= 9; j++) {
+                        strTargetCells[counter] = "R" + i + "C" + j;
+                        counter++;
+                    }
+                }
+            }
+        }               
+
+        // MIDDLE LEFT
+        if(r >= 4 && r <= 6) {
+            if (c >= 1 && c <= 3) {
+                for (int i = 4; i <= 6; i++) {
+                    for (int j = 1; j <= 3; j++) {
+                        strTargetCells[counter] = "R" + i + "C" + j;
+                        counter++;
+                    }
+                }
+            }
+        }
+
+        // MIDDLE CENTER
+        if(r >= 4 && r <= 6) {
+            if (c >= 4 && c <= 6) {
+                for (int i = 4; i <=6; i++) {
+                    for (int j = 4; j <= 6; j++) {
+                        strTargetCells[counter] = "R" + i + "C" + j;
+                        counter++;
+                    }
+                }
+            }
+        }            
+
+        // MIDDLE RIGHT
+        if(r >= 4 && r <= 6) {
+            if (c >= 7 && c <= 9) {
+                for (int i = 4; i <=6; i++) {
+                    for (int j = 7; j <= 9; j++) {
+                        strTargetCells[counter] = "R" + i + "C" + j;
+                        counter++;
+                    }
+                }
+            }
+        }              
+
+        // BOTTOM LEFT
+        if(r >= 7 && r <= 9) {
+            if (c >= 1 && c <= 3) {
+                for (int i = 7; i <= 9; i++) {
+                    for (int j = 1; j <= 3; j++) {
+                        strTargetCells[counter] = "R" + i + "C" + j;
+                        counter++;
+                    }
+                }
+            }
+        }
+
+        // BOTTOM CENTER
+        if(r >= 7 && r <= 9) {
+            if (c >= 4 && c <= 6) {
+                for (int i = 7; i <= 9; i++) {
+                    for (int j = 4; j <= 6; j++) {
+                        strTargetCells[counter] = "R" + i + "C" + j;
+                        counter++;
+                    }
+                }
+            }
+        }            
+
+        // BOTTOM RIGHT
+        if(r >= 7 && r <= 9) {
+            if (c >= 7 && c <= 9) {
+                for (int i = 7; i <= 9; i++) {
+                    for (int j = 7; j <= 9; j++) {
+                        strTargetCells[counter] = "R" + i + "C" + j;
+                        counter++;
+                    }
+                }
+            }
+        }                
+
+        return strTargetCells;
+    }
+    
+    @FXML private void loadPuzzle(Event e) throws IOException {
         String strFullPath = System.getProperty("user.dir");
         strFullPath = strFullPath + "\\" + strSourcePuzzleFile;
         try {
             BufferedReader br = new BufferedReader(new FileReader(strFullPath));
             String strLine;
             int intCounter = 0;
+            resetBoard();
             resetHighlights();
             while((strLine = br.readLine()) != null) {
                 System.out.println(strLine);
@@ -365,14 +822,16 @@ public class FXMLDocumentController implements Initializable {
         }        
     }
     
-    @FXML
-    private void stopGame (Event e) {
+    @FXML private void stopGame (Event e) {
         btn_Start.setDisable(false);
         btn_Stop.setDisable(true);
+        btn_AutoPlay.setDisable(true);
         lst_options.setDisable(true);
-        btn_CheckResult.setDisable(true);
+        btn_SingleStep.setDisable(true);
         cmb_selectMethod.setDisable(false);
         hasGameStarted = false;
+        blnFirstTimeStepMode = true;
+        intStepModeCounter = 0;
         resetBoard();
         resetHighlights();
      }
@@ -383,11 +842,11 @@ public class FXMLDocumentController implements Initializable {
     * value is missing, it will enter ZERO
     * @param e 
     */
-    @FXML
-    private void startGame(Event e) {
+    @FXML private void startGame(Event e) {
         // Check to make sure Select Method has been selected ...
         hasGameStarted = true;
-        
+        blnFirstTimeStepMode = true;
+        intStepModeCounter = 0;
         int rows, cols;
         rows = cols = 0;
         String text;
@@ -426,11 +885,65 @@ public class FXMLDocumentController implements Initializable {
             }
         }
         strGameMode = cmb_selectMethod.getSelectionModel().getSelectedItem();
-        System.out.println("Game Mode: " + strGameMode);
+        try {
+            switch(strGameMode) {
+                case "Manual":
+                    JOptionPane.showMessageDialog(null, "To play game manually, "
+                            + "use the mouse to select each cell and then enter "
+                            + "one of the recommended values", "Initiate Game", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                    //cmb_selectMethod.setDisable(true);                    
+                    break;
+                case "Uninformed Search":
+                    //cmb_selectMethod.setDisable(true);
+                    break;
+                case "Minimum Remaining Values": 
+                    //cmb_selectMethod.setDisable(true);
+                    break;                
+                
+            }
+        } catch (NullPointerException npe) {
+                JOptionPane.showMessageDialog(null, "Please select a Game Mode.", "Initiate Game", JOptionPane.INFORMATION_MESSAGE);  
+                cmb_selectMethod.setDisable(false);
+                cmb_selectMethod.requestFocus();
+        }
         
         btn_Stop.setDisable(false);
         btn_Start.setDisable(true);
-        cmb_selectMethod.setDisable(true);
+        btn_SingleStep.setDisable(false);
+        setupTable();
+    }
+    
+    private void setupTable() {
+        
+        tbl_History.getColumns().clear();
+        
+        TableColumn<History, Integer> iDCol = new TableColumn<>("#");
+        iDCol.setMaxWidth(30);
+        iDCol.setCellValueFactory(new PropertyValueFactory("intCounter"));
+
+        TableColumn<History, String> strCell = new TableColumn<>("Cell");
+        strCell.setCellValueFactory(new PropertyValueFactory("strCell"));        
+        
+        TableColumn<History, Integer> strSelectedValue = new TableColumn<>("Value");
+        strSelectedValue.setCellValueFactory(new PropertyValueFactory("intSelectedValue"));        
+
+        TableColumn<History, String> strRemainingValues = new TableColumn<>("Remaining Values");
+        strRemainingValues.setMinWidth(150);
+        strRemainingValues.setCellValueFactory(new PropertyValueFactory("strRemainingValues"));        
+
+        TableColumn<History, String> strUsedValues = new TableColumn<>("Used Values");
+        strUsedValues.setCellValueFactory(new PropertyValueFactory("strUsedValues"));        
+
+        TableColumn<History, String> blnUsable = new TableColumn<>("Usable");
+        blnUsable.setMinWidth(40);
+        blnUsable.setCellValueFactory(new PropertyValueFactory("blnUsable"));      
+        
+        tbl_History.setEditable(true);
+        tbl_History.setItems(data);   
+        tbl_History.getColumns().addAll(iDCol,strCell,strSelectedValue,strRemainingValues,strUsedValues,blnUsable);
+        tbl_History.getSelectionModel().setCellSelectionEnabled(true);
+      
     }
     
     @Override
@@ -438,6 +951,7 @@ public class FXMLDocumentController implements Initializable {
         hasGameStarted = false;
         showFiles();
         btn_loadpuzzle.setDisable(true);
+        btn_AutoPlay.setDisable(true);
         cmb_showFiles.valueProperty().addListener(new ChangeListener<String>() {
 
             @Override
@@ -656,13 +1170,13 @@ public class FXMLDocumentController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 switch(newValue) {
                     case "Manual":
-                        btn_CheckResult.setDisable(false);
+                        btn_SingleStep.setDisable(true);
                         break;
                     case "Uninformed Search":
-                        btn_CheckResult.setDisable(true);                
+                        btn_SingleStep.setDisable(false);                
                         break;
                     case "Minimum Remaining Values":
-                        btn_CheckResult.setDisable(true);                
+                        btn_SingleStep.setDisable(false);                
                         break;
                 }                
             }
@@ -670,7 +1184,7 @@ public class FXMLDocumentController implements Initializable {
         
         btn_Stop.setDisable(true);
         //lst_options.setDisable(true);
-        btn_CheckResult.setDisable(true);
+        btn_SingleStep.setDisable(true);
     }    
     
     /**
@@ -738,7 +1252,6 @@ public class FXMLDocumentController implements Initializable {
         return intValues;
     }
 
-    
     private void transfer_row1(int[] intValues) {
         
         if(intValues[0] != 0) {
@@ -1170,12 +1683,43 @@ public class FXMLDocumentController implements Initializable {
             R9C9.setStyle("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;");
         }        
     }    
-    
+
+    // This method is used when the forward pass is going on. strUsedValues will be the currently used value
+    // For reverse pass (another method), strUsedValues will contain more values based on previous successes
+    private void addToTableView(int intValue, String strCell, int intCounter) {
+        String strRemainingValues = "";
+        boolean blnFirstEntry = true;
+        
+        for(int i = 1; i < lst_options.getItems().size(); i++) {
+            if(blnFirstEntry) {
+               strRemainingValues = Integer.toString(lst_options.getItems().get(i));
+               blnFirstEntry = false;
+            } else {
+               strRemainingValues = strRemainingValues + " " + lst_options.getItems().get(i);
+            }
+        }
+        
+        History history = new History();
+        
+        history.setIntCounter(intCounter + 1);
+
+        history.setStrCell(strCell);
+
+        history.setIntSelectedValue(intValue);
+
+        history.setStrRemainingValues(strRemainingValues);
+
+        history.setStrUsedValues(Integer.toString(intValue));
+
+        history.setBlnUsable(true);
+        
+        tbl_History.getItems().add(history);
+       
+    }
    
     private class MouseClickedEventHandler implements EventHandler<Event> {
         @Override
         public void handle (Event e) {
-
             if(hasGameStarted) {
                 String strStyle = "";
                 resetHighlights();
@@ -1356,7 +1900,6 @@ public class FXMLDocumentController implements Initializable {
             return strTargetCells;
         }
     }
-
     
     private void resetHighlights() {
         String strHighlightedStyle = "-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;";
@@ -1783,8 +2326,8 @@ public class FXMLDocumentController implements Initializable {
     }
 
     /**
-     * This inner class adds an event handler to each of the text boxes so that when
-     * they are clicked, the fx:id of the text box is shown below
+     * This inner class adds an event handler to each of the strCellID boxes so that when
+ they are clicked, the fx:id of the strCellID box is shown below
      */
     private class MouseExitedEventHandler implements EventHandler<Event> {
         @Override
@@ -2320,7 +2863,6 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-
     private void populateOptions() {
         String strStyle = "";
         boolean [] blnOptions = new boolean[9];  // This list will feed the observable list 
@@ -2361,8 +2903,7 @@ public class FXMLDocumentController implements Initializable {
             }
         }
         lst_options.getItems().clear();
-        lst_options.setItems(options);            
+        lst_options.setItems(options);  
     }    
-    
 }
 

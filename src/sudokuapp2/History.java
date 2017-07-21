@@ -10,40 +10,38 @@ package sudokuapp2;
  * @author Chakravarty
  */
 public class History {
-    private int intCount;
+    private int intCounter;
     private String strCell;
-    private String strSelectedValue;
+    private int intSelectedValue;
     private String strRemainingValues;
     private String strUsedValues;
     private boolean blnUsable;
 
+    public History () {
+    }
+    
     public History(
-            int intCount, 
+            int intCounter,
             String strCell, 
-            String strSelectedValue, 
+            int intSelectedValue, 
             String strRemainingValues,
             String strUsedValues,
             boolean blnUsable) {
         
-        this.intCount = intCount;
+        this.intCounter = intCounter;
         this.strCell = strCell;
-        this.strSelectedValue = strSelectedValue;
+        this.intSelectedValue = intSelectedValue;
         this.strRemainingValues = strRemainingValues;
         this.strUsedValues = strUsedValues;
         this.blnUsable = blnUsable;
     }
 
-    public int getIntCount() {return intCount;}
+    // Getters
+    public void setIntCounter(int intCounter) {this.intCounter = intCounter;}
 
-    public String getStrCell() {return strCell;}
+    public void setStrCell(String strCell) {this.strCell = strCell;}
 
-    public String getStrSelectedValue() {return strSelectedValue;}
-
-    public String getStrRemainingValues() {return strRemainingValues;}
-    
-    public String getStrUsedValues() {return strUsedValues;}
-
-    public void setStrSelectedValue(String strSelectedValue) {this.strSelectedValue = strSelectedValue;}
+    public void setIntSelectedValue(int intSelectedValue) {this.intSelectedValue = intSelectedValue;}
 
     public void setStrRemainingValues(String strRemainingValues) {this.strRemainingValues = strRemainingValues;}
 
@@ -51,5 +49,19 @@ public class History {
 
     public void setBlnUsable(boolean blnUsable) {this.blnUsable = blnUsable;}
     
+    // Setters
+    public int getIntCounter() {return intCounter;}
+
+    public boolean isBlnUsable() {return blnUsable;}
+
+    public String getStrCell() {return strCell;}
+
+    public int getIntSelectedValue() {return intSelectedValue;}
+
+    public String getStrRemainingValues() {return strRemainingValues;}
+    
+    public String getStrUsedValues() {return strUsedValues;}
+
     public boolean getUsable() {return blnUsable;}
+    
 }
