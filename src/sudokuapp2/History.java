@@ -13,6 +13,7 @@ public class History {
     private int intCounter;
     private String strCell;
     private int intSelectedValue;
+    private int intCountRemaining;
     private String strRemainingValues;
     private String strUsedValues;
     private boolean blnUsable;
@@ -24,6 +25,7 @@ public class History {
             int intCounter,
             String strCell, 
             int intSelectedValue, 
+            int intCountRemaining,
             String strRemainingValues,
             String strUsedValues,
             boolean blnUsable) {
@@ -31,10 +33,12 @@ public class History {
         this.intCounter = intCounter;
         this.strCell = strCell;
         this.intSelectedValue = intSelectedValue;
+        this.intCountRemaining = intCountRemaining;
         this.strRemainingValues = strRemainingValues;
         this.strUsedValues = strUsedValues;
         this.blnUsable = blnUsable;
     }
+
 
     // Getters
     public void setIntCounter(int intCounter) {this.intCounter = intCounter;}
@@ -43,6 +47,8 @@ public class History {
 
     public void setIntSelectedValue(int intSelectedValue) {this.intSelectedValue = intSelectedValue;}
 
+    public void setIntCountRemaining(int intCountRemaining) {this.intCountRemaining = intCountRemaining;}
+    
     public void setStrRemainingValues(String strRemainingValues) {this.strRemainingValues = strRemainingValues;}
 
     public void setStrUsedValues(String strUsedValues) {this.strUsedValues = strUsedValues;}
@@ -58,6 +64,8 @@ public class History {
 
     public int getIntSelectedValue() {return intSelectedValue;}
 
+    public int getIntCountRemaining() {return intCountRemaining;}
+    
     public String getStrRemainingValues() {return strRemainingValues;}
     
     public String getStrUsedValues() {return strUsedValues;}

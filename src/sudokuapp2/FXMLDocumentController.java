@@ -20,13 +20,16 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -41,7 +44,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -68,6 +73,16 @@ public class FXMLDocumentController implements Initializable {
     private boolean blnFirstTimeStepMode = true;
     private int intStepModeCounter = 0;
     private final ObservableList<History> data = FXCollections.observableArrayList();
+    private ObservableList<String> items;
+    private TableColumn<History, Integer> iDCol = new TableColumn<>("#");
+    private TableColumn<History, String> strCell = new TableColumn<>("Cell");
+    private TableColumn<History, Integer> strSelectedValue = new TableColumn<>("Value");
+    private TableColumn<History, Integer> intCountRemaining = new TableColumn<>("C");    
+    private TableColumn<History, String> strRemainingValues = new TableColumn<>("Remaining Values");
+    private TableColumn<History, String> strUsedValues = new TableColumn<>("Used Values");
+    private TableColumn<History, String> blnUsable = new TableColumn<>("Usable");
+    private Backtrack backtrack;
+    private int intNewCounter = 0;
     
     // PANE
     @FXML private Pane mainPane; 
@@ -211,7 +226,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void initiate_StepMode(String strMode) {
-        
+        boolean blnBacktrackActive = false;
         if(blnFirstTimeStepMode) {
             blnFirstTimeStepMode = false;
             myCells = getNodesOfType(mainPane, TextField.class);
@@ -224,33 +239,64 @@ public class FXMLDocumentController implements Initializable {
         }             
         switch (strMode){
             case "Uninformed Search":
+                
                 String strStyle;
                 target = getNodesOfType(mainPane, TextField.class);
-                for (TextField t : target) {
-                    strStyle = t.getStyle();
-                    if(t.getId().contains(strCells[intStepModeCounter])) {
+                for (int i = 0; i < target.size(); i++) {
+                    
+                    blnBacktrackActive = false;
+                    strStyle = target.get(i).getStyle();
+                    System.out.println("ID: " + target.get(i).getId());
+                    
+                    if(target.get(i).getId().contains(strCells[intStepModeCounter])) {
                         if(!strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
-                              play_mode_uninformed_search(strCells[intStepModeCounter]);
-                              try {
-                                  int intValue = lst_options.getItems().get(0);
-                                  addValue(intValue, strCells[intStepModeCounter]);
-                                  addToTableView(intValue, strCells[intStepModeCounter], intStepModeCounter);
-                                  break;
-                              } catch (Exception e) {
-                                  System.err.println("Error: " + e.getMessage());
-                                  break;
-                              }                        
-                          }
+                            play_mode_uninformed_search(strCells[intStepModeCounter]);
+                            try {
+                                int intListViewCount = lst_options.getItems().size();
+                                if(intListViewCount > 0) {
+                                    int intValue = lst_options.getItems().get(0);
+                                    addValue(intValue, strCells[intStepModeCounter]);
+                                    addToTableView(intValue, strCells[intStepModeCounter], intStepModeCounter);     
+                                    intStepModeCounter++;
+                                    return;
+                                } else {
+                                    System.err.println("Contradiction Found");
+                                    solveContradiction();
+                                    blnBacktrackActive = true;
+                                    if(blnBacktrackActive) {
+                                        intStepModeCounter = intNewCounter;
+                                        i = determineBacktrackCounter(target,strCells[intStepModeCounter]);
+                                        i--;
+                                        return;
+                                    }    
+                                    
+                                }
+                                
+                            } catch (Exception e) {
+                                System.err.println("Error: " + e.getMessage());
+                                break;
+                            }                        
+                        } else {
+                            intStepModeCounter++;
+                        }
                     }                       
                 }
-                
-                intStepModeCounter++;
                 break;
                 
             case "Minimum Remaining Values":
                 play_mode_mrv();
                 break;
         }
+    }
+    
+    private int determineBacktrackCounter (List<TextField> tempList, String strCurrentCell) {
+        int i;
+        for (i = 0; i < tempList.size(); i++) {
+            if(tempList.get(i).getId().contains(strCurrentCell)) {
+                break;
+            }
+        }
+        return i;
     }
     
     private void play_mode_uninformed_search(String strCell) {
@@ -285,264 +331,667 @@ public class FXMLDocumentController implements Initializable {
         switch (strCell) {
             // Row 1
             case "R1C1":
-                R1C1.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R1C1.setText(Integer.toString(intValue));                    
+                } else {
+                    R1C1.clear();
+                }
                 break;
+
             case "R1C2":
-                R1C2.setText(Integer.toString(intValue));
+                if(intValue > 0) {                
+                    R1C2.setText(Integer.toString(intValue));
+                } else {
+                    R1C2.clear();
+                }
                 break;
+            
             case "R1C3":
-                R1C3.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R1C3.setText(Integer.toString(intValue));                    
+                } else {
+                    R1C3.clear();
+                }
                 break;
+            
             case "R1C4":
-                R1C4.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R1C4.setText(Integer.toString(intValue));                    
+                } else {
+                    R1C4.clear();
+                }
                 break;
+            
             case "R1C5":
-                R1C5.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R1C5.setText(Integer.toString(intValue));                    
+                } else {
+                    R1C5.clear();
+                }
                 break;
+            
             case "R1C6":
-                R1C6.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R1C6.setText(Integer.toString(intValue));                    
+                } else {
+                    R1C6.clear();
+                }
                 break;
+            
             case "R1C7":
-                R1C7.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R1C7.setText(Integer.toString(intValue));                    
+                } else {
+                    R1C7.clear();
+                }
                 break;
+            
             case "R1C8":
-                R1C8.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R1C8.setText(Integer.toString(intValue));                    
+                } else {
+                    R1C8.clear();
+                }
                 break;
+
             case "R1C9":
-                R1C9.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R1C9.setText(Integer.toString(intValue));                    
+                } else {
+                    R1C9.clear();
+                }
                 break;
 
             // Row 2
             case "R2C1":
-                R2C1.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R2C1.setText(Integer.toString(intValue));                    
+                } else {
+                    R2C1.clear();
+                }
                 break;
+
             case "R2C2":
-                R2C2.setText(Integer.toString(intValue));
+                if(intValue > 0) {                
+                    R2C2.setText(Integer.toString(intValue));
+                } else {
+                    R2C2.clear();
+                }
                 break;
+            
             case "R2C3":
-                R2C3.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R2C3.setText(Integer.toString(intValue));                    
+                } else {
+                    R2C3.clear();
+                }
                 break;
+            
             case "R2C4":
-                R2C4.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R2C4.setText(Integer.toString(intValue));                    
+                } else {
+                    R2C4.clear();
+                }
                 break;
+            
             case "R2C5":
-                R2C5.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R2C5.setText(Integer.toString(intValue));                    
+                } else {
+                    R2C5.clear();
+                }
                 break;
+            
             case "R2C6":
-                R2C6.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R2C6.setText(Integer.toString(intValue));                    
+                } else {
+                    R2C6.clear();
+                }
                 break;
+            
             case "R2C7":
-                R2C7.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R2C7.setText(Integer.toString(intValue));                    
+                } else {
+                    R2C7.clear();
+                }
                 break;
+            
             case "R2C8":
-                R2C8.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R2C8.setText(Integer.toString(intValue));                    
+                } else {
+                    R2C8.clear();
+                }
                 break;
+
             case "R2C9":
-                R2C9.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R2C9.setText(Integer.toString(intValue));                    
+                } else {
+                    R2C9.clear();
+                }
                 break;
 
             // Row 3                
             case "R3C1":
-                R3C1.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R3C1.setText(Integer.toString(intValue));                    
+                } else {
+                    R3C1.clear();
+                }
                 break;
+
             case "R3C2":
-                R3C2.setText(Integer.toString(intValue));
+                if(intValue > 0) {                
+                    R3C2.setText(Integer.toString(intValue));
+                } else {
+                    R3C2.clear();
+                }
                 break;
+            
             case "R3C3":
-                R3C3.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R3C3.setText(Integer.toString(intValue));                    
+                } else {
+                    R3C3.clear();
+                }
                 break;
+            
             case "R3C4":
-                R3C4.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R3C4.setText(Integer.toString(intValue));                    
+                } else {
+                    R3C4.clear();
+                }
                 break;
+            
             case "R3C5":
-                R3C5.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R3C5.setText(Integer.toString(intValue));                    
+                } else {
+                    R3C5.clear();
+                }
                 break;
+            
             case "R3C6":
-                R3C6.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R3C6.setText(Integer.toString(intValue));                    
+                } else {
+                    R3C6.clear();
+                }
                 break;
+            
             case "R3C7":
-                R3C7.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R3C7.setText(Integer.toString(intValue));                    
+                } else {
+                    R3C7.clear();
+                }
                 break;
+            
             case "R3C8":
-                R3C8.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R3C8.setText(Integer.toString(intValue));                    
+                } else {
+                    R3C8.clear();
+                }
                 break;
+
             case "R3C9":
-                R3C9.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R3C9.setText(Integer.toString(intValue));                    
+                } else {
+                    R3C9.clear();
+                }
                 break;
+
 
             // Row 4                
             case "R4C1":
-                R4C1.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R4C1.setText(Integer.toString(intValue));                    
+                } else {
+                    R4C1.clear();
+                }
                 break;
+
             case "R4C2":
-                R4C2.setText(Integer.toString(intValue));
+                if(intValue > 0) {                
+                    R4C2.setText(Integer.toString(intValue));
+                } else {
+                    R4C2.clear();
+                }
                 break;
+            
             case "R4C3":
-                R4C3.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R4C3.setText(Integer.toString(intValue));                    
+                } else {
+                    R4C3.clear();
+                }
                 break;
+            
             case "R4C4":
-                R4C4.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R4C4.setText(Integer.toString(intValue));                    
+                } else {
+                    R4C4.clear();
+                }
                 break;
+            
             case "R4C5":
-                R4C5.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R4C5.setText(Integer.toString(intValue));                    
+                } else {
+                    R4C5.clear();
+                }
                 break;
+            
             case "R4C6":
-                R4C6.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R4C6.setText(Integer.toString(intValue));                    
+                } else {
+                    R4C6.clear();
+                }
                 break;
+            
             case "R4C7":
-                R4C7.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R4C7.setText(Integer.toString(intValue));                    
+                } else {
+                    R4C7.clear();
+                }
                 break;
+            
             case "R4C8":
-                R4C8.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R4C8.setText(Integer.toString(intValue));                    
+                } else {
+                    R4C8.clear();
+                }
                 break;
+
             case "R4C9":
-                R4C9.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R4C9.setText(Integer.toString(intValue));                    
+                } else {
+                    R4C9.clear();
+                }
                 break;
+
 
             // Row 5                
             case "R5C1":
-                R5C1.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R5C1.setText(Integer.toString(intValue));                    
+                } else {
+                    R5C1.clear();
+                }
                 break;
+
             case "R5C2":
-                R5C2.setText(Integer.toString(intValue));
+                if(intValue > 0) {                
+                    R5C2.setText(Integer.toString(intValue));
+                } else {
+                    R5C2.clear();
+                }
                 break;
+            
             case "R5C3":
-                R5C3.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R5C3.setText(Integer.toString(intValue));                    
+                } else {
+                    R5C3.clear();
+                }
                 break;
+            
             case "R5C4":
-                R5C4.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R5C4.setText(Integer.toString(intValue));                    
+                } else {
+                    R5C4.clear();
+                }
                 break;
+            
             case "R5C5":
-                R5C5.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R5C5.setText(Integer.toString(intValue));                    
+                } else {
+                    R5C5.clear();
+                }
                 break;
+            
             case "R5C6":
-                R5C6.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R5C6.setText(Integer.toString(intValue));                    
+                } else {
+                    R5C6.clear();
+                }
                 break;
+            
             case "R5C7":
-                R5C7.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R5C7.setText(Integer.toString(intValue));                    
+                } else {
+                    R5C7.clear();
+                }
                 break;
+            
             case "R5C8":
-                R5C8.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R5C8.setText(Integer.toString(intValue));                    
+                } else {
+                    R5C8.clear();
+                }
                 break;
+
             case "R5C9":
-                R5C9.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R5C9.setText(Integer.toString(intValue));                    
+                } else {
+                    R5C9.clear();
+                }
                 break;
+
 
             // Row 6
             case "R6C1":
-                R6C1.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R6C1.setText(Integer.toString(intValue));                    
+                } else {
+                    R6C1.clear();
+                }
                 break;
+
             case "R6C2":
-                R6C2.setText(Integer.toString(intValue));
+                if(intValue > 0) {                
+                    R6C2.setText(Integer.toString(intValue));
+                } else {
+                    R6C2.clear();
+                }
                 break;
+            
             case "R6C3":
-                R6C3.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R6C3.setText(Integer.toString(intValue));                    
+                } else {
+                    R6C3.clear();
+                }
                 break;
+            
             case "R6C4":
-                R6C4.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R6C4.setText(Integer.toString(intValue));                    
+                } else {
+                    R6C4.clear();
+                }
                 break;
+            
             case "R6C5":
-                R6C5.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R6C5.setText(Integer.toString(intValue));                    
+                } else {
+                    R6C5.clear();
+                }
                 break;
+            
             case "R6C6":
-                R6C6.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R6C6.setText(Integer.toString(intValue));                    
+                } else {
+                    R6C6.clear();
+                }
                 break;
+            
             case "R6C7":
-                R6C7.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R6C7.setText(Integer.toString(intValue));                    
+                } else {
+                    R6C7.clear();
+                }
                 break;
+            
             case "R6C8":
-                R6C8.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R6C8.setText(Integer.toString(intValue));                    
+                } else {
+                    R6C8.clear();
+                }
                 break;
+
             case "R6C9":
-                R6C9.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R6C9.setText(Integer.toString(intValue));                    
+                } else {
+                    R6C9.clear();
+                }
                 break;
+
 
             // Row 7                
             case "R7C1":
-                R7C1.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R7C1.setText(Integer.toString(intValue));                    
+                } else {
+                    R7C1.clear();
+                }
                 break;
+
             case "R7C2":
-                R7C2.setText(Integer.toString(intValue));
+                if(intValue > 0) {                
+                    R7C2.setText(Integer.toString(intValue));
+                } else {
+                    R7C2.clear();
+                }
                 break;
+            
             case "R7C3":
-                R7C3.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R7C3.setText(Integer.toString(intValue));                    
+                } else {
+                    R7C3.clear();
+                }
                 break;
+            
             case "R7C4":
-                R7C4.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R7C4.setText(Integer.toString(intValue));                    
+                } else {
+                    R7C4.clear();
+                }
                 break;
+            
             case "R7C5":
-                R7C5.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R7C5.setText(Integer.toString(intValue));                    
+                } else {
+                    R7C5.clear();
+                }
                 break;
+            
             case "R7C6":
-                R7C6.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R7C6.setText(Integer.toString(intValue));                    
+                } else {
+                    R7C6.clear();
+                }
                 break;
+            
             case "R7C7":
-                R7C7.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R7C7.setText(Integer.toString(intValue));                    
+                } else {
+                    R7C7.clear();
+                }
                 break;
+            
             case "R7C8":
-                R7C8.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R7C8.setText(Integer.toString(intValue));                    
+                } else {
+                    R7C8.clear();
+                }
                 break;
+
             case "R7C9":
-                R7C9.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R7C9.setText(Integer.toString(intValue));                    
+                } else {
+                    R7C9.clear();
+                }
                 break;
+
 
             // Row 8                
             case "R8C1":
-                R8C1.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R8C1.setText(Integer.toString(intValue));                    
+                } else {
+                    R8C1.clear();
+                }
                 break;
+
             case "R8C2":
-                R8C2.setText(Integer.toString(intValue));
+                if(intValue > 0) {                
+                    R8C2.setText(Integer.toString(intValue));
+                } else {
+                    R8C2.clear();
+                }
                 break;
+            
             case "R8C3":
-                R8C3.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R8C3.setText(Integer.toString(intValue));                    
+                } else {
+                    R8C3.clear();
+                }
                 break;
+            
             case "R8C4":
-                R8C4.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R8C4.setText(Integer.toString(intValue));                    
+                } else {
+                    R8C4.clear();
+                }
                 break;
+            
             case "R8C5":
-                R8C5.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R8C5.setText(Integer.toString(intValue));                    
+                } else {
+                    R8C5.clear();
+                }
                 break;
+            
             case "R8C6":
-                R8C6.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R8C6.setText(Integer.toString(intValue));                    
+                } else {
+                    R8C6.clear();
+                }
                 break;
+            
             case "R8C7":
-                R8C7.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R8C7.setText(Integer.toString(intValue));                    
+                } else {
+                    R8C7.clear();
+                }
                 break;
+            
             case "R8C8":
-                R8C8.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R8C8.setText(Integer.toString(intValue));                    
+                } else {
+                    R8C8.clear();
+                }
                 break;
+
             case "R8C9":
-                R8C9.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R8C9.setText(Integer.toString(intValue));                    
+                } else {
+                    R8C9.clear();
+                }
                 break;
+
 
             // Row 9                
             case "R9C1":
-                R9C1.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R9C1.setText(Integer.toString(intValue));                    
+                } else {
+                    R9C1.clear();
+                }
                 break;
+
             case "R9C2":
-                R9C2.setText(Integer.toString(intValue));
+                if(intValue > 0) {                
+                    R9C2.setText(Integer.toString(intValue));
+                } else {
+                    R9C2.clear();
+                }
                 break;
+            
             case "R9C3":
-                R9C3.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R9C3.setText(Integer.toString(intValue));                    
+                } else {
+                    R9C3.clear();
+                }
                 break;
+            
             case "R9C4":
-                R9C4.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R9C4.setText(Integer.toString(intValue));                    
+                } else {
+                    R9C4.clear();
+                }
                 break;
+            
             case "R9C5":
-                R9C5.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R9C5.setText(Integer.toString(intValue));                    
+                } else {
+                    R9C5.clear();
+                }
                 break;
+            
             case "R9C6":
-                R9C6.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R9C6.setText(Integer.toString(intValue));                    
+                } else {
+                    R9C6.clear();
+                }
                 break;
+            
             case "R9C7":
-                R9C7.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R9C7.setText(Integer.toString(intValue));                    
+                } else {
+                    R9C7.clear();
+                }
                 break;
+            
             case "R9C8":
-                R9C8.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R9C8.setText(Integer.toString(intValue));                    
+                } else {
+                    R9C8.clear();
+                }
                 break;
+
             case "R9C9":
-                R9C9.setText(Integer.toString(intValue));
+                if(intValue > 0) {
+                    R9C9.setText(Integer.toString(intValue));                    
+                } else {
+                    R9C9.clear();
+                }
                 break;
+
         }
     }    
     
@@ -918,32 +1367,29 @@ public class FXMLDocumentController implements Initializable {
         
         tbl_History.getColumns().clear();
         
-        TableColumn<History, Integer> iDCol = new TableColumn<>("#");
         iDCol.setMaxWidth(30);
         iDCol.setCellValueFactory(new PropertyValueFactory("intCounter"));
-
-        TableColumn<History, String> strCell = new TableColumn<>("Cell");
         strCell.setCellValueFactory(new PropertyValueFactory("strCell"));        
-        
-        TableColumn<History, Integer> strSelectedValue = new TableColumn<>("Value");
-        strSelectedValue.setCellValueFactory(new PropertyValueFactory("intSelectedValue"));        
-
-        TableColumn<History, String> strRemainingValues = new TableColumn<>("Remaining Values");
-        strRemainingValues.setMinWidth(150);
+        strSelectedValue.setCellValueFactory(new PropertyValueFactory("intSelectedValue"));  
+        intCountRemaining.setCellValueFactory(new PropertyValueFactory("intCountRemaining"));
+        intCountRemaining.setMaxWidth(20);
+        strRemainingValues.setMinWidth(130);
         strRemainingValues.setCellValueFactory(new PropertyValueFactory("strRemainingValues"));        
-
-        TableColumn<History, String> strUsedValues = new TableColumn<>("Used Values");
         strUsedValues.setCellValueFactory(new PropertyValueFactory("strUsedValues"));        
-
-        TableColumn<History, String> blnUsable = new TableColumn<>("Usable");
-        blnUsable.setMinWidth(40);
+        blnUsable.setMaxWidth(100);
         blnUsable.setCellValueFactory(new PropertyValueFactory("blnUsable"));      
         
         tbl_History.setEditable(true);
         tbl_History.setItems(data);   
-        tbl_History.getColumns().addAll(iDCol,strCell,strSelectedValue,strRemainingValues,strUsedValues,blnUsable);
+        tbl_History.getColumns().addAll(
+                iDCol,
+                strCell,
+                strSelectedValue,
+                intCountRemaining,
+                strRemainingValues,
+                strUsedValues,blnUsable);
         tbl_History.getSelectionModel().setCellSelectionEnabled(true);
-      
+        tbl_History.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
     
     @Override
@@ -1149,9 +1595,9 @@ public class FXMLDocumentController implements Initializable {
         myCells = getNodesOfType(mainPane, TextField.class);
         it = myCells.iterator();
         while (it.hasNext()) {
-            String text = it.next().getText().toString();
+            String text = it.next().getText();
             if(text.length()>0) {
-                System.out.println("Content: " + text.toString());                
+                System.out.println("Content: " + text);                
             }
         }
         
@@ -1165,20 +1611,17 @@ public class FXMLDocumentController implements Initializable {
             System.err.println(e.getMessage());
         }
         
-        cmb_selectMethod.valueProperty().addListener(new ChangeListener<String>(){
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                switch(newValue) {
-                    case "Manual":
-                        btn_SingleStep.setDisable(true);
-                        break;
-                    case "Uninformed Search":
-                        btn_SingleStep.setDisable(false);                
-                        break;
-                    case "Minimum Remaining Values":
-                        btn_SingleStep.setDisable(false);                
-                        break;
-                }                
+        cmb_selectMethod.valueProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            switch(newValue) {
+                case "Manual":
+                    btn_SingleStep.setDisable(true);
+                    break;
+                case "Uninformed Search":
+                    btn_SingleStep.setDisable(false);
+                    break;
+                case "Minimum Remaining Values":
+                    btn_SingleStep.setDisable(false);
+                    break;                
             }
         });
         
@@ -1689,8 +2132,10 @@ public class FXMLDocumentController implements Initializable {
     private void addToTableView(int intValue, String strCell, int intCounter) {
         String strRemainingValues = "";
         boolean blnFirstEntry = true;
+        int intRemainingValuesCount = 0;
         
         for(int i = 1; i < lst_options.getItems().size(); i++) {
+            intRemainingValuesCount++;
             if(blnFirstEntry) {
                strRemainingValues = Integer.toString(lst_options.getItems().get(i));
                blnFirstEntry = false;
@@ -1706,6 +2151,8 @@ public class FXMLDocumentController implements Initializable {
         history.setStrCell(strCell);
 
         history.setIntSelectedValue(intValue);
+        
+        history.setIntCountRemaining(intRemainingValuesCount);
 
         history.setStrRemainingValues(strRemainingValues);
 
@@ -1716,14 +2163,90 @@ public class FXMLDocumentController implements Initializable {
         tbl_History.getItems().add(history);
        
     }
-   
+
+    private void solveContradiction() {
+        
+            try {
+                History currentCell;
+                int intRemainingCount;
+                int intAlternateValue;
+                String strRemainingValues_New;
+                String strPreviousCell;
+
+                do {
+                    int intLastRow = tbl_History.getItems().size();
+                    tbl_History.requestFocus();
+                    tbl_History.getSelectionModel().selectLast();
+                    currentCell = tbl_History.getSelectionModel().getSelectedItem();
+                    tbl_History.getFocusModel().focus(0);
+                    intRemainingCount = currentCell.getIntCountRemaining();
+                    if(intRemainingCount == 0) {
+                        tbl_History.getItems().remove(intLastRow - 1);
+                        System.err.println("Delete Cell: " + currentCell.getStrCell());
+                        addValue(-1, currentCell.getStrCell());
+                        tbl_History.getColumns().get(0).setVisible(false);
+                        tbl_History.getColumns().get(0).setVisible(true);
+                    }
+                } while (intRemainingCount == 0);
+                    intAlternateValue = identifyAlternateValue(currentCell.getStrRemainingValues());
+                    strRemainingValues_New = identifyRemainingValues(currentCell.getStrRemainingValues());
+                    strPreviousCell = currentCell.getStrCell();
+                    // Create new object to store previous values
+                    backtrack = new Backtrack();
+                    backtrack.setIntCount(currentCell.getIntCounter());
+                    backtrack.setStrCell(currentCell.getStrCell());
+                    backtrack.setIntCurrentValue(currentCell.getIntSelectedValue());
+                    backtrack.setIntAlternateValue(intAlternateValue);
+                    backtrack.setStrRemainingValues(strRemainingValues_New);
+                    backtrack.setStrUsedValues(currentCell.getStrUsedValues() + " " + Integer.toString(intAlternateValue));
+                    backtrack.setIntCountRemaining(currentCell.getIntCountRemaining() - 1);
+
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+            }
+                     
+            data.forEach((History) -> {
+                System.out.println(History.getStrCell());
+                if(History.getStrCell().contains(backtrack.getStrCell())) {
+                    History.setIntSelectedValue(backtrack.getIntAlternateValue());
+                    History.setStrRemainingValues(backtrack.getStrRemainingValues());
+                    History.setIntCountRemaining(backtrack.getIntCountRemaining());
+                    History.setStrUsedValues(backtrack.getStrUsedValues());
+                    addValue(backtrack.getIntAlternateValue(), backtrack.getStrCell());
+                }
+            });
+        
+        intNewCounter = data.size();   
+    }
+
+    private String identifyRemainingValues(String strRemainingValues) {
+        String strTemp = "";
+        String strRemaining = "";
+        int intLength = strRemainingValues.length();
+        try {
+            if(!strRemainingValues.isEmpty()) {
+                strTemp = strRemainingValues.substring(0);
+                strRemaining = strRemainingValues.substring(1, intLength);
+            }            
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            strRemaining = "";
+        }
+        return strRemaining;
+    }    
+    
+    private int identifyAlternateValue(String strRemainingValues) {
+        String arrValues[] = strRemainingValues.split(" ");
+        return Integer.parseInt(arrValues[0]);
+    }
+    
     private class MouseClickedEventHandler implements EventHandler<Event> {
         @Override
         public void handle (Event e) {
             if(hasGameStarted) {
                 String strStyle = "";
                 resetHighlights();
-                String strControlName = ((Control)e.getSource()).getId().toString();
+                String strControlName = ((Control)e.getSource()).getId();
                 strTargetCells = createHighlightArray(strControlName);
                 target = getNodesOfType(mainPane, TextField.class);
                 for(TextField t : target) {
