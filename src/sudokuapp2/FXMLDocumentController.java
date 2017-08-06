@@ -64,11 +64,13 @@ public class FXMLDocumentController implements Initializable {
     private List<TextField> target;
     private List<TextField> myCells;
     private Iterator<TextField> it;
+    private String strMRV_Cell = "";
     private String[] strCells = new String[81];
     private int[][] sudoku_grid = new int [9][9];
     private String strGameMode = "";
     private String[] strTargetCells = new String[27];
     private String strSourcePuzzleFile;
+    private int intPreviousRemVal = 100;
     private Service<Void> backgroundThread;
     private boolean blnFirstTimeStepMode = true;
     private int intStepModeCounter = 0;
@@ -83,6 +85,8 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<History, String> blnUsable = new TableColumn<>("Usable");
     private Backtrack backtrack;
     private int intNewCounter = 0;
+    private ArrayList<History> lstHistory = new ArrayList<>();
+    private MinimumRV_Cell minimumrv_cell = new MinimumRV_Cell();
     
     // PANE
     @FXML private Pane mainPane; 
@@ -221,12 +225,16 @@ public class FXMLDocumentController implements Initializable {
         } catch (NullPointerException npe) {
                 JOptionPane.showMessageDialog(null, "Please select a Game Mode.", "Initiate Game", JOptionPane.INFORMATION_MESSAGE);  
                 cmb_selectMethod.requestFocus();
-                System.err.println("Error: " + npe.getMessage());
+                //System.err.println("Error: " + npe.getMessage());
         }
     }
 
     private void initiate_StepMode(String strMode) {
         boolean blnBacktrackActive = false;
+        String strStyle;
+        int intRMVCounter = 0;
+        target = getNodesOfType(mainPane, TextField.class);
+                
         if(blnFirstTimeStepMode) {
             blnFirstTimeStepMode = false;
             myCells = getNodesOfType(mainPane, TextField.class);
@@ -239,9 +247,6 @@ public class FXMLDocumentController implements Initializable {
         }             
         switch (strMode){
             case "Uninformed Search":
-                
-                String strStyle;
-                target = getNodesOfType(mainPane, TextField.class);
                 for (int i = 0; i < target.size(); i++) {
                     
                     blnBacktrackActive = false;
@@ -269,11 +274,9 @@ public class FXMLDocumentController implements Initializable {
                                         i--;
                                         return;
                                     }    
-                                    
                                 }
-                                
                             } catch (Exception e) {
-                                System.err.println("Error: " + e.getMessage());
+                                //System.err.println("Error: " + e.getMessage());
                                 break;
                             }                        
                         } else {
@@ -284,9 +287,88 @@ public class FXMLDocumentController implements Initializable {
                 break;
                 
             case "Minimum Remaining Values":
-                play_mode_mrv();
+                int intCurrentRemVal = 0;
+                try {
+                    for (TextField target1 : target) {
+                    blnBacktrackActive = false;
+                    strStyle = target1.getStyle();
+                    //System.out.println("ID: " + target.get(i).getId());
+                        if (target1.getId().contains(strCells[intStepModeCounter])) {
+                            if (strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
+                                
+                            } else {
+                                if(isCellEmpty(strCells[intStepModeCounter])) {
+                                    intCurrentRemVal = determineMinimumValue(strCells[intStepModeCounter]); // Calculate MRV for each cell
+                                    if (intCurrentRemVal < intPreviousRemVal) {
+                                        // If MRV of current cell is less than the previously recorded MRV, then store the result
+                                        System.out.println("MRV Cell: " + target1.getId());
+                                        strMRV_Cell = target1.getId();
+                                        intPreviousRemVal = intCurrentRemVal;
+                                        intRMVCounter = intStepModeCounter;
+                                        //createHighlightArray(target1.getId());                                    
+                                    }
+                                }
+                            }
+                        }
+                    intStepModeCounter++;
+                    }
+                } catch (ArrayIndexOutOfBoundsException aibe) {
+                    System.err.println("Error: ArrayIndexOutOfBoundsException");
+                }
+                
+                
+                if(strMRV_Cell.length()!=0) {
+                    play_mode_mrv(strMRV_Cell);
+                    intStepModeCounter=0;
+                    intPreviousRemVal=100;
+                    try {
+                        int intListViewCount;
+                        intListViewCount = lst_options.getItems().size();
+                        if(intListViewCount > 0) {
+                            int intValue = lst_options.getItems().get(0);
+                            addValue(intValue, strMRV_Cell);
+                            addToTableView(intValue, strMRV_Cell, intRMVCounter);     
+                        } else {
+                            System.err.println("Contradiction Found");
+                            solveContradiction();
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error: " + e.getMessage());
+                        break;
+                    }             
+                    strMRV_Cell="";
+                } else {
+                    JOptionPane.showMessageDialog(null, "Game Over!");
+                }
+                
                 break;
         }
+    }
+    
+    private int determineMinimumValue(String strCell) {
+        int intMRV = -1;
+        String strStyle;        
+        if(strCell.length()>0) {
+            resetHighlights();
+            strTargetCells = createHighlightArray(strCell);
+            target = getNodesOfType(mainPane, TextField.class);
+            for(TextField t : target) {
+                strStyle = t.getStyle();
+                //System.out.println("Cell Style: " + t.getId() + " - " + t.getText() +" - " + strStyle);
+                if(!strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
+                    for (String strTargetCell : strTargetCells) {
+                        if (strTargetCell != null) {
+                            if (t.getId().contains(strTargetCell)) {
+                                t.setStyle("-fx-background-color: RGB(162,100,100); -fx-opacity: 0.7; -fx-border-color: silver");
+                                break;
+                            }                                    
+                        }
+                    }                        
+                }
+            }
+            intMRV = populateOptions_mrv();
+        }        
+        return intMRV;
     }
     
     private int determineBacktrackCounter (List<TextField> tempList, String strCurrentCell) {
@@ -307,7 +389,7 @@ public class FXMLDocumentController implements Initializable {
             target = getNodesOfType(mainPane, TextField.class);
             for(TextField t : target) {
                 strStyle = t.getStyle();
-                System.out.println("Cell Style: " + t.getId() + " - " + t.getText() +" - " + strStyle);
+                //System.out.println("Cell Style: " + t.getId() + " - " + t.getText() +" - " + strStyle);
                 if(!strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
                     for(int i = 0; i < strTargetCells.length; i++) {
                         if(strTargetCells[i] != null) {
@@ -323,8 +405,28 @@ public class FXMLDocumentController implements Initializable {
         }       
     }
     
-    private void play_mode_mrv() {
-        
+    private void play_mode_mrv(String strCell) {
+        String strStyle;        
+        if(strCell.length()>0) {
+            resetHighlights();
+            strTargetCells = createHighlightArray(strCell);
+            target = getNodesOfType(mainPane, TextField.class);
+            for(TextField t : target) {
+                strStyle = t.getStyle();
+                //System.out.println("Cell Style: " + t.getId() + " - " + t.getText() +" - " + strStyle);
+                if(!strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
+                    for(int i = 0; i < strTargetCells.length; i++) {
+                        if(strTargetCells[i] != null) {
+                            if(t.getId().contains(strTargetCells[i])) {
+                                t.setStyle("-fx-background-color: RGB(162,100,100); -fx-opacity: 0.7; -fx-border-color: silver");
+                                break;
+                            }                                    
+                        }
+                    }                        
+                }
+            }
+            populateOptions();
+        }   
     }
 
     private void addValue(int intValue, String strCell) {
@@ -1019,7 +1121,7 @@ public class FXMLDocumentController implements Initializable {
                                 target = getNodesOfType(mainPane, TextField.class);
                                 for(TextField t : target) {
                                     strStyle = t.getStyle();
-                                    System.out.println("Cell Style: " + t.getId() + " - " + t.getText() +" - " + strStyle);
+                                    //System.out.println("Cell Style: " + t.getId() + " - " + t.getText() +" - " + strStyle);
                                     if(!strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
                                         for(int i = 0; i < strTargetCells.length; i++) {
                                             if(strTargetCells[i] != null) {
@@ -1283,6 +1385,7 @@ public class FXMLDocumentController implements Initializable {
         intStepModeCounter = 0;
         resetBoard();
         resetHighlights();
+        intPreviousRemVal = 100;
      }
 
    /**
@@ -1296,6 +1399,7 @@ public class FXMLDocumentController implements Initializable {
         hasGameStarted = true;
         blnFirstTimeStepMode = true;
         intStepModeCounter = 0;
+        intPreviousRemVal = 100;
         int rows, cols;
         rows = cols = 0;
         String text;
@@ -1591,7 +1695,7 @@ public class FXMLDocumentController implements Initializable {
         R9C7.addEventHandler(MouseEvent.MOUSE_EXITED, new MouseExitedEventHandler());
         R9C8.addEventHandler(MouseEvent.MOUSE_EXITED, new MouseExitedEventHandler());
         R9C9.addEventHandler(MouseEvent.MOUSE_EXITED, new MouseExitedEventHandler());
-
+        
         myCells = getNodesOfType(mainPane, TextField.class);
         it = myCells.iterator();
         while (it.hasNext()) {
@@ -2144,6 +2248,8 @@ public class FXMLDocumentController implements Initializable {
             }
         }
         
+        
+        
         History history = new History();
         
         history.setIntCounter(intCounter + 1);
@@ -2157,68 +2263,165 @@ public class FXMLDocumentController implements Initializable {
         history.setStrRemainingValues(strRemainingValues);
 
         history.setStrUsedValues(Integer.toString(intValue));
-
-        history.setBlnUsable(true);
+        
+        lstHistory.add(history);
+        
+        for(History h : lstHistory) {
+            System.out.println("Object: " + h.getStrCell() + " Remaining Values: " + h.getStrRemainingValues() + " Current Value: " + h.getIntSelectedValue());
+        }
+        
+        if(intRemainingValuesCount == 0) {
+            history.setBlnUsable(false);
+        } else {
+            history.setBlnUsable(true);            
+        }
         
         tbl_History.getItems().add(history);
        
     }
 
     private void solveContradiction() {
-        
-            try {
-                History currentCell;
-                int intRemainingCount;
-                int intAlternateValue;
-                String strRemainingValues_New;
-                String strPreviousCell;
 
-                do {
-                    int intLastRow = tbl_History.getItems().size();
-                    tbl_History.requestFocus();
-                    tbl_History.getSelectionModel().selectLast();
-                    currentCell = tbl_History.getSelectionModel().getSelectedItem();
-                    tbl_History.getFocusModel().focus(0);
-                    intRemainingCount = currentCell.getIntCountRemaining();
-                    if(intRemainingCount == 0) {
-                        tbl_History.getItems().remove(intLastRow - 1);
-                        System.err.println("Delete Cell: " + currentCell.getStrCell());
-                        addValue(-1, currentCell.getStrCell());
-                        tbl_History.getColumns().get(0).setVisible(false);
-                        tbl_History.getColumns().get(0).setVisible(true);
+        History currentCell;
+        int intRemainingCount = -1;         // Default Values - Don't Use
+        int intAlternateValue = -1;         // Default Values - Don't Use
+        String strRemainingValues_New = ""; // Default Values - Don't Use
+        String strPreviousCell = "";        // Default Values - Don't Use
+        String strOldUsedValues = "";       // Default Values - Don't Use
+
+        try {
+
+            do {
+                int intLastRow = tbl_History.getItems().size();
+                tbl_History.requestFocus();
+                tbl_History.getSelectionModel().select(intLastRow - 1);
+                currentCell = tbl_History.getSelectionModel().getSelectedItem();
+                resetHighlight(currentCell.getStrCell());
+                tbl_History.getFocusModel().focus(0);
+                intRemainingCount = currentCell.getIntCountRemaining(); // Are there any remaining values available?
+                if(intRemainingCount == 0) {
+                    tbl_History.getItems().remove(intLastRow - 1); // Remove the last row because USABLE = 0
+                    System.err.println("Delete Cell: " + currentCell.getStrCell());
+                    addValue(-1, currentCell.getStrCell());
+                    tbl_History.getColumns().get(0).setVisible(false);
+                    tbl_History.getColumns().get(0).setVisible(true);
+                    
+                    // Remove the object from the Array List since it is no longer required
+                    for (int i = 0; i < lstHistory.size(); i++) {
+                        if(lstHistory.get(i).getStrCell().contains(currentCell.getStrCell())) {
+                            lstHistory.remove(i);                            
+                        }
                     }
-                } while (intRemainingCount == 0);
-                    intAlternateValue = identifyAlternateValue(currentCell.getStrRemainingValues());
-                    strRemainingValues_New = identifyRemainingValues(currentCell.getStrRemainingValues());
-                    strPreviousCell = currentCell.getStrCell();
-                    // Create new object to store previous values
-                    backtrack = new Backtrack();
-                    backtrack.setIntCount(currentCell.getIntCounter());
-                    backtrack.setStrCell(currentCell.getStrCell());
-                    backtrack.setIntCurrentValue(currentCell.getIntSelectedValue());
-                    backtrack.setIntAlternateValue(intAlternateValue);
-                    backtrack.setStrRemainingValues(strRemainingValues_New);
-                    backtrack.setStrUsedValues(currentCell.getStrUsedValues() + " " + Integer.toString(intAlternateValue));
-                    backtrack.setIntCountRemaining(currentCell.getIntCountRemaining() - 1);
-
-            } catch (Exception e) {
-                System.err.println("Error: " + e.getMessage());
-            }
-                     
-            data.forEach((History) -> {
-                System.out.println(History.getStrCell());
-                if(History.getStrCell().contains(backtrack.getStrCell())) {
-                    History.setIntSelectedValue(backtrack.getIntAlternateValue());
-                    History.setStrRemainingValues(backtrack.getStrRemainingValues());
-                    History.setIntCountRemaining(backtrack.getIntCountRemaining());
-                    History.setStrUsedValues(backtrack.getStrUsedValues());
-                    addValue(backtrack.getIntAlternateValue(), backtrack.getStrCell());
                 }
-            });
+            } while (intRemainingCount == 0);
+
+            intAlternateValue = identifyAlternateValue(currentCell.getStrRemainingValues());
+            strRemainingValues_New = identifyRemainingValues(currentCell.getStrRemainingValues());
+            strPreviousCell = currentCell.getStrCell();
+
+            // Create new object to store previous values
+            backtrack = new Backtrack();
+            backtrack.setIntCount(currentCell.getIntCounter());
+            backtrack.setStrCell(currentCell.getStrCell());
+            backtrack.setIntCurrentValue(currentCell.getIntSelectedValue());
+            backtrack.setIntAlternateValue(intAlternateValue);
+            backtrack.setStrRemainingValues(strRemainingValues_New);
+            backtrack.setStrUsedValues(currentCell.getStrUsedValues() + " " + Integer.toString(intAlternateValue));
+            backtrack.setIntCountRemaining(currentCell.getIntCountRemaining() - 1);
+
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+
+        for(History h: lstHistory) {
+            /*
+                intCounter          - NO CHANGE
+                strCell             - NO CHANGE
+                intSelectedValue    - CHANGE TO ALTERNATE VALUE
+                intCountRemaining   - REDUCE REMAINING COUNT BY 1
+                strRemainingValues  - DEL THE VALUE THAT JUST GOT USED UP AS AN ALTERNATE  
+                strUsedValues       - ADD THE VALUE THAT JUST GOT USED UP AS AN ALTERNATE
+                blnUsable           - IF REMAINING COUNT = 0, THEN FALSE, ELSE TRUE
+            */
+            if(h.getStrCell().contains(strPreviousCell)) {
+                
+                h.setIntSelectedValue(intAlternateValue);
+                h.setIntCountRemaining(h.getIntCountRemaining() - 1);
+                strOldUsedValues = h.getStrUsedValues();
+                String strUsedValues = strNewUsedValues(strOldUsedValues, "Used Values", intAlternateValue);
+                h.setStrUsedValues(strUsedValues);
+                h.setStrRemainingValues(strRemainingValues_New);
+                if(h.getIntCountRemaining() == 0) {
+                    h.setBlnUsable(false);
+                } else {
+                    h.setBlnUsable(true);
+                }         
+                
+                System.out.println("");
+                System.out.println("");
+                System.out.println("NEW VALUES: ");
+                System.out.println("Cell\t\tValue\t\tCount\t\tRemaining Values\t\tUsedValues\t\tUsable");
+                System.out.println(strPreviousCell + "\t\t" + intAlternateValue + "\t\t" + h.getIntCountRemaining() + 
+                        "\t\t" + strRemainingValues_New + "\t\t\t\t" + strUsedValues + "\t\t\t" + h.getUsable());                
+                
+                reverseHighlight(strPreviousCell);
+                addValue(intAlternateValue,strPreviousCell);
+            }
+        }
+                     
+        /*
+        data.forEach((History) -> {
+            System.out.println(History.getStrCell());
+            if(History.getStrCell().contains(backtrack.getStrCell())) {
+                History.setIntSelectedValue(backtrack.getIntAlternateValue());
+                History.setStrRemainingValues(backtrack.getStrRemainingValues());
+                History.setIntCountRemaining(backtrack.getIntCountRemaining());
+                History.setStrUsedValues(backtrack.getStrUsedValues());
+                addValue(backtrack.getIntAlternateValue(), backtrack.getStrCell());
+            }
+        });
+        */    
         
         intNewCounter = data.size();   
     }
 
+    private String strNewUsedValues(String strOldValues, String strAction, int intAlternateValue) {
+        String strReturnValues = "";
+        boolean blnFirstTime = true;
+        
+        switch (strAction) {
+            
+            case "Used Values":
+                strReturnValues = strOldValues + " " + Integer.toString(intAlternateValue);
+                break;
+                
+            case "Remaining Values":
+                String arrValues[] = strOldValues.split(" ");
+                for (int i = 1; i < arrValues.length; i++) {
+                    if(blnFirstTime) {
+                        strReturnValues = arrValues[i];
+                        blnFirstTime = false;
+                    } else {
+                        strReturnValues = strReturnValues + " " + arrValues[i];
+                    }
+                }
+                
+                /*
+                for (String arrValue : arrValues) {
+                    if (!arrValue.contains(Integer.toString(intAlternateValue))) {
+                        if (blnFirstTime) {
+                            strReturnValues = arrValue;
+                        } else {
+                            strReturnValues = strReturnValues + " " + arrValue;
+                        }
+                    }
+                }
+                */
+                break;
+        }
+        return strReturnValues;
+    }
+    
     private String identifyRemainingValues(String strRemainingValues) {
         String strTemp = "";
         String strRemaining = "";
@@ -2236,8 +2439,554 @@ public class FXMLDocumentController implements Initializable {
     }    
     
     private int identifyAlternateValue(String strRemainingValues) {
+        int intReturnValue = 0;
+        strRemainingValues.trim();
         String arrValues[] = strRemainingValues.split(" ");
-        return Integer.parseInt(arrValues[0]);
+        for(int i = 0; i < arrValues.length; i++) {
+            try {
+                intReturnValue = Integer.parseInt(arrValues[i]);
+            } catch (Exception e) {
+                intReturnValue = Integer.parseInt(arrValues[i + 1]);
+            }
+        }
+        return intReturnValue;
+    }
+
+    private void reverseHighlight(String strControlName) {
+        String strStyle = "";
+        resetHighlights();
+        strTargetCells = createHighlightArray(strControlName);
+        target = getNodesOfType(mainPane, TextField.class);
+        for(TextField t : target) {
+            strStyle = t.getStyle();
+            //System.out.println("Cell Style: " + t.getId() + " - " + t.getText() +" - " + strStyle);
+            if(!strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
+                for(int i = 0; i < strTargetCells.length; i++) {
+                    if(strTargetCells[i] != null) {
+                        if(t.getId().contains(strTargetCells[i])) {
+                            t.setStyle("-fx-background-color: RGB(162,100,100); -fx-opacity: 0.7; -fx-border-color: silver");
+                            break;
+                        }                                    
+                    }
+                }                        
+            }
+        }
+        populateOptions();        
+    }
+
+    private void resetHighlight(String strControlName) {
+        target = getNodesOfType(mainPane, TextField.class);
+        for(TextField t : target) {
+            if(t.getId().contains(strControlName)) {
+                t.setStyle("-fx-background-color:  white; -fx-border-color: silver");
+                break;
+            }                                    
+        }
+    }    
+
+    private boolean isCellEmpty(String strCell) {
+        boolean blnEmpty = false;
+        switch(strCell) {
+            
+            case "R1C1":
+                if(R1C1.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R1C2":
+                if(R1C2.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R1C3":
+                if(R1C3.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+
+            case "R1C4":
+                if(R1C4.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R1C5":
+                if(R1C5.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R1C6":
+                if(R1C6.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R1C7":
+                if(R1C7.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R1C8":
+                if(R1C8.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R1C9":
+                if(R1C9.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+
+
+            case "R2C1":
+                if(R2C1.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R2C2":
+                if(R2C2.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R2C3":
+                if(R2C3.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+
+            case "R2C4":
+                if(R2C4.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R2C5":
+                if(R2C5.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R2C6":
+                if(R2C6.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R2C7":
+                if(R2C7.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R2C8":
+                if(R2C8.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R2C9":
+                if(R2C9.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+                
+
+            case "R3C1":
+                if(R3C1.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R3C2":
+                if(R3C2.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R3C3":
+                if(R3C3.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+
+            case "R3C4":
+                if(R3C4.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R3C5":
+                if(R3C5.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R3C6":
+                if(R3C6.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R3C7":
+                if(R3C7.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R3C8":
+                if(R3C8.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R3C9":
+                if(R3C9.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+                
+                
+            case "R4C1":
+                if(R4C1.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R4C2":
+                if(R4C2.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R4C3":
+                if(R4C3.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+
+            case "R4C4":
+                if(R4C4.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R4C5":
+                if(R4C5.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R4C6":
+                if(R4C6.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R4C7":
+                if(R4C7.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R4C8":
+                if(R4C8.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R4C9":
+                if(R4C9.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+                
+
+            case "R5C1":
+                if(R5C1.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R5C2":
+                if(R5C2.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R5C3":
+                if(R5C3.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+
+            case "R5C4":
+                if(R5C4.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R5C5":
+                if(R5C5.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R5C6":
+                if(R5C6.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R5C7":
+                if(R5C7.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R5C8":
+                if(R5C8.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R5C9":
+                if(R5C9.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+                
+                
+            case "R6C1":
+                if(R6C1.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R6C2":
+                if(R6C2.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R6C3":
+                if(R6C3.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+
+            case "R6C4":
+                if(R6C4.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R6C5":
+                if(R6C5.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R6C6":
+                if(R6C6.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R6C7":
+                if(R6C7.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R6C8":
+                if(R6C8.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R6C9":
+                if(R6C9.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+                
+
+            case "R7C1":
+                if(R7C1.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R7C2":
+                if(R7C2.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R7C3":
+                if(R7C3.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+
+            case "R7C4":
+                if(R7C4.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R7C5":
+                if(R7C5.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R7C6":
+                if(R7C6.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R7C7":
+                if(R7C7.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R7C8":
+                if(R7C8.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R7C9":
+                if(R7C9.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+                
+
+            case "R8C1":
+                if(R8C1.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R8C2":
+                if(R8C2.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R8C3":
+                if(R8C3.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+
+            case "R8C4":
+                if(R8C4.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R8C5":
+                if(R8C5.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R8C6":
+                if(R8C6.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R8C7":
+                if(R8C7.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R8C8":
+                if(R8C8.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R8C9":
+                if(R8C9.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+                
+
+            case "R9C1":
+                if(R9C1.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R9C2":
+                if(R9C2.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+
+            case "R9C3":
+                if(R9C3.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+
+            case "R9C4":
+                if(R9C4.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R9C5":
+                if(R9C5.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R9C6":
+                if(R9C6.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R9C7":
+                if(R9C7.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R9C8":
+                if(R9C8.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;
+                
+            case "R9C9":
+                if(R9C9.getText().length()==0) {
+                    blnEmpty = true;
+                }
+                break;                
+                
+                
+                
+        }
+        
+        return blnEmpty;
     }
     
     private class MouseClickedEventHandler implements EventHandler<Event> {
@@ -2251,7 +3000,7 @@ public class FXMLDocumentController implements Initializable {
                 target = getNodesOfType(mainPane, TextField.class);
                 for(TextField t : target) {
                     strStyle = t.getStyle();
-                    System.out.println("Cell Style: " + t.getId() + " - " + t.getText() +" - " + strStyle);
+                    //System.out.println("Cell Style: " + t.getId() + " - " + t.getText() +" - " + strStyle);
                     if(!strStyle.contains("-fx-background-color:  RGB(229,231,231); -fx-border-color: silver; -fx-text-fill: red; -fx-font-size: 20;")) {
                         for(int i = 0; i < strTargetCells.length; i++) {
                             if(strTargetCells[i] != null) {
@@ -2473,7 +3222,6 @@ public class FXMLDocumentController implements Initializable {
             R1C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
         }
     
-
         strCurrentCellStyle = R2C1.getStyle();
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
             R2C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
@@ -2518,8 +3266,6 @@ public class FXMLDocumentController implements Initializable {
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
             R2C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
         }
-
-
         
         strCurrentCellStyle = R3C1.getStyle();
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
@@ -2565,7 +3311,6 @@ public class FXMLDocumentController implements Initializable {
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
             R3C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
         }
-        
 
         strCurrentCellStyle = R4C1.getStyle();
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
@@ -2612,8 +3357,6 @@ public class FXMLDocumentController implements Initializable {
             R4C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
         }
         
-        
-
         strCurrentCellStyle = R5C1.getStyle();
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
             R5C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
@@ -2658,7 +3401,6 @@ public class FXMLDocumentController implements Initializable {
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
             R5C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
         }
-        
 
         strCurrentCellStyle = R6C1.getStyle();
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
@@ -2705,8 +3447,6 @@ public class FXMLDocumentController implements Initializable {
             R6C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
         }
         
-
-        
         strCurrentCellStyle = R7C1.getStyle();
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
             R7C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
@@ -2752,7 +3492,6 @@ public class FXMLDocumentController implements Initializable {
             R7C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
         }
         
-
         strCurrentCellStyle = R8C1.getStyle();
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
             R8C1.setStyle("-fx-background-color:  white; -fx-border-color: silver");            
@@ -2797,7 +3536,6 @@ public class FXMLDocumentController implements Initializable {
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
             R8C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
         }
-        
 
         strCurrentCellStyle = R9C1.getStyle();
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {
@@ -2843,9 +3581,6 @@ public class FXMLDocumentController implements Initializable {
         if(!strCurrentCellStyle.contains(strHighlightedStyle)) {        
             R9C9.setStyle("-fx-background-color:  white; -fx-border-color: silver");
         }
-        
-        
-        
     }
 
     /**
@@ -3386,28 +4121,30 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
+    /**
+     * This method populates the list with the available values
+     */
     private void populateOptions() {
         String strStyle = "";
         boolean [] blnOptions = new boolean[9];  // This list will feed the observable list 
-                         // for list view. It will show possible values.
+                                                 // for list view. It will show possible values.
         ObservableList<Integer> options = FXCollections.observableArrayList();
 
         // reset the boolean array so that in subsequent uses, it does not provide misleading results
-
         int intValue = 0;
         boolean blnBlankCell = true;
         options.removeAll();         
 
         for (TextField t : target) {
-            for(int i = 0; i < strTargetCells.length; i++) {
-                if(t.getId().contains(strTargetCells[i])) {
+            for (String strTargetCell : strTargetCells) {
+                if (t.getId().contains(strTargetCell)) {
                     strStyle = t.getStyle();
                     if(!strStyle.contains("-fx-background-color: white;")) {
                         try {
-                           intValue = Integer.parseInt(t.getText());
-                           blnBlankCell = false;
+                            intValue = Integer.parseInt(t.getText());
+                            blnBlankCell = false;
                         } catch (NumberFormatException nfe) {
-                            System.err.println("Number Format Exception: " + nfe.getMessage());
+                            //System.err.println("Number Format Exception: " + nfe.getMessage());
                             intValue=0;
                             blnBlankCell = true;
                         }
@@ -3428,5 +4165,48 @@ public class FXMLDocumentController implements Initializable {
         lst_options.getItems().clear();
         lst_options.setItems(options);  
     }    
+
+    private int populateOptions_mrv() {
+        String strStyle = "";
+        boolean [] blnOptions = new boolean[9];  // This list will feed the observable list 
+                                                 // for list view. It will show possible values.
+        ObservableList<Integer> options = FXCollections.observableArrayList();
+
+        // reset the boolean array so that in subsequent uses, it does not provide misleading results
+        int intValue = 0;
+        boolean blnBlankCell = true;
+        options.removeAll();         
+
+        for (TextField t : target) {
+            for (String strTargetCell : strTargetCells) {
+                if (t.getId().contains(strTargetCell)) {
+                    strStyle = t.getStyle();
+                    if(!strStyle.contains("-fx-background-color: white;")) {
+                        try {
+                            intValue = Integer.parseInt(t.getText());
+                            blnBlankCell = false;
+                        } catch (NumberFormatException nfe) {
+                            //System.err.println("Number Format Exception: " + nfe.getMessage());
+                            intValue=0;
+                            blnBlankCell = true;
+                        }
+                        if(intValue != 0 && blnBlankCell == false) {
+                            blnOptions[intValue-1] = true;
+                        }                           
+                    }
+                    break;
+                }                                    
+            }
+        }
+        
+        for (int i = 0; i < 9; i++) {
+            if(!blnOptions[i]) {
+                options.add(i + 1);
+            }
+        }
+        lst_options.getItems().clear();
+        lst_options.setItems(options);  
+        return lst_options.getItems().size();
+    }        
 }
 
