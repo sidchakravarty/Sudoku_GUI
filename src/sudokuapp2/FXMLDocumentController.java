@@ -211,10 +211,10 @@ public class FXMLDocumentController implements Initializable {
                             + "one of the recommended values", "Initiate Game", 
                             JOptionPane.INFORMATION_MESSAGE);
                     break;
-                case "Uninformed Search":
+                case "Un-Informed Search":
                     initiate_StepMode("Uninformed Search");
                     break;
-                case "Minimum Remaining Values": 
+                case "[AI] - Minimum Remaining Values": 
                     initiate_StepMode("Minimum Remaining Values");
                     break;
             }
@@ -1443,10 +1443,10 @@ public class FXMLDocumentController implements Initializable {
                             JOptionPane.INFORMATION_MESSAGE);
                     //cmb_selectMethod.setDisable(true);                    
                     break;
-                case "Uninformed Search":
+                case "Un-Informed Search":
                     //cmb_selectMethod.setDisable(true);
                     break;
-                case "Minimum Remaining Values": 
+                case "[AI] - Minimum Remaining Values": 
                     //cmb_selectMethod.setDisable(true);
                     break;                
                 
@@ -1703,7 +1703,7 @@ public class FXMLDocumentController implements Initializable {
         
         // Add Combo Box options
         String[] strOptions = {
-           "Manual", "Uninformed Search", "Minimum Remaining Values"
+           "Manual", "Un-Informed Search", "[AI] - Minimum Remaining Values"
        };
         try {
             cmb_selectMethod.getItems().addAll(strOptions);            
@@ -1716,10 +1716,10 @@ public class FXMLDocumentController implements Initializable {
                 case "Manual":
                     btn_SingleStep.setDisable(true);
                     break;
-                case "Uninformed Search":
+                case "Un-Informed Search":
                     btn_SingleStep.setDisable(false);
                     break;
-                case "Minimum Remaining Values":
+                case "[AI] - Minimum Remaining Values":
                     btn_SingleStep.setDisable(false);
                     break;                
             }

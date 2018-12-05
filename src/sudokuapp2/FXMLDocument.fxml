@@ -583,13 +583,13 @@
                </font>
             </Label>
             <TableView fx:id="tbl_History" editable="true" layoutX="323.0" layoutY="39.0" prefHeight="115.0" prefWidth="520.0" />
-            <Label layoutX="89.0" layoutY="13.0" prefHeight="17.0" prefWidth="60.0" text="Load Game:">
+            <Label disable="true" layoutX="89.0" layoutY="13.0" prefHeight="17.0" prefWidth="60.0" text="Load Game:">
                <font>
                   <Font name="Arial" size="10.0" />
                </font>
             </Label>
-            <Button fx:id="btn_loadpuzzle" layoutX="260.0" layoutY="9.0" mnemonicParsing="false" onAction="#loadPuzzle" prefHeight="25.0" prefWidth="54.0" text="Load" />
-            <ComboBox fx:id="cmb_showFiles" layoutX="155.0" layoutY="9.0" prefHeight="25.0" prefWidth="101.0" />
+            <Button fx:id="btn_loadpuzzle" disable="true" layoutX="260.0" layoutY="9.0" mnemonicParsing="false" onAction="#loadPuzzle" prefHeight="25.0" prefWidth="54.0" text="Load" />
+            <ComboBox fx:id="cmb_showFiles" disable="true" layoutX="155.0" layoutY="9.0" prefHeight="25.0" prefWidth="101.0" />
             <Button fx:id="btn_SingleStep" layoutX="592.0" layoutY="9.0" mnemonicParsing="false" onAction="#solvePuzzle_SingleStep" prefHeight="25.0" prefWidth="132.0" text="Single Step" />
             <Button fx:id="btn_AutoPlay" layoutX="726.0" layoutY="9.0" mnemonicParsing="false" onAction="#solvePuzzle_AutoMode" prefHeight="25.0" prefWidth="116.0" text="Auto Play Mode" />
          </children>
